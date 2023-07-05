@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   MiddlewareConsumer,
   Module,
@@ -7,7 +8,6 @@ import {
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/middleware/Logger.middleware';
-import { AuthModule } from './auth/auth.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({

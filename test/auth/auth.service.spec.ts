@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { ApiBasicAuth } from '@nestjs/swagger';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateAuthDto } from 'src/auth/dto/create-auth.dto';
+import { Payload } from 'src/auth/jwt/jwt.payload';
 import { AuthService } from '../../src/auth/auth.service';
 
 export class FakeAuthRepository {
@@ -15,6 +17,10 @@ export class FakeAuthRepository {
     }
     return;
   }
+  async findUserByIdWithoutPassword(userId: number) {
+    const result = { id: 1, userId: 'aaa' };
+    return result;
+  }
 }
 
 describe('AuthService', () => {
@@ -22,7 +28,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      providers: [AuthService, JwtService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -43,5 +49,26 @@ describe('AuthService', () => {
     const body = { userId: 'abcd', password: '1234' };
     const result = await service.signUp(body);
     expect(result).toBeNull;
+  });
+
+  it('로그인: 존재하지 않는 id일 경우 - 실패', async () => {
+    const body = { userId: 'abcd', pasword: '1234' };
+    await expect(service.signIn(body)).rejects.toThrowError(
+      new UnauthorizedException('아이디 혹은 비밀번호가 올바르지 않습니다.'),
+    );
+  });
+
+  it('로그인: 비밀번호가 틀렸을 경우 - 실패', async () => {
+    const body = { userId: 'aaa', pasword: '12345' };
+    await expect(service.signIn(body)).rejects.toThrowError(
+      new UnauthorizedException('아이디 혹은 비밀번호가 올바르지 않습니다.'),
+    );
+  });
+
+  it('로그인이 성공했을 경우', async () => {
+    const body = { userId: 'aaa', password: '1234' };
+
+    const result = await service.signIn(body);
+    expect(result).toHaveProperty('access_token');
   });
 });
