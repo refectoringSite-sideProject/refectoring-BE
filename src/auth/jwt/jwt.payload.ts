@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
 export type Payload = {
-  id: string;
+  userId: string;
   sub: number;
 };

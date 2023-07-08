@@ -6,11 +6,12 @@ import {
 } from '@nestjs/common';
 import { FakeAuthRepository } from '../../test/auth/auth.service.spec';
 import { JwtService } from '@nestjs/jwt';
+// import { authRepository } from '../../test/auth/auth.service.spec';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
-  authRepository = new FakeAuthRepository();
+  authRepository: FakeAuthRepository;
 
   async signUp(body) {
     const { userId, password } = body;
@@ -37,11 +38,25 @@ export class AuthService {
     }
 
     const payload = { userId: user.userId, sub: user.id };
-    const access_token = this.jwtService.sign(payload, {
-      secret: 'secret',
-      expiresIn: '60m',
-    });
-    console.log(access_token);
-    return { access_token };
+    const accessToken = this.generateJwt(payload, 'access');
+    return { accessToken };
+  }
+
+  async generateJwt(payload, typeOfToken) {
+    if (typeOfToken === 'access') {
+      // console.log(process.env.SECRET_KEY_ACCESS);
+      const accessToken = this.jwtService.sign(payload, {
+        secret: '왜안대',
+        expiresIn: '60m',
+      });
+      return { accessToken };
+    }
+    if (typeOfToken === 'refresh') {
+      const refreshToken = this.jwtService.sign(payload, {
+        secret: '와이!!!!',
+        expiresIn: '12h',
+      });
+      return { refreshToken };
+    }
   }
 }

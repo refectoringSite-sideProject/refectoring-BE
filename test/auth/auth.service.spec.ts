@@ -23,6 +23,8 @@ export class FakeAuthRepository {
   }
 }
 
+// export const authRepository = new FakeAuthRepository();
+
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -69,6 +71,12 @@ describe('AuthService', () => {
     const body = { userId: 'aaa', password: '1234' };
 
     const result = await service.signIn(body);
-    expect(result).toHaveProperty('access_token');
+    expect(result).toHaveProperty('accessToken');
+  });
+
+  it('토큰 발급에 성공한다', async () => {
+    const payload = { userId: 'aaa', sub: 1 };
+    const result = await service.generateJwt(payload, 'access');
+    expect(result).toHaveProperty('accessToken');
   });
 });
