@@ -4,8 +4,9 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FakeAuthRepository } from '../../test/auth/auth.service.spec';
+import { FakeAuthRepository } from '../../../test/auth/auth.service.spec';
 import { JwtService } from '@nestjs/jwt';
+import { Payload } from './jwt/jwt.payload';
 // import { authRepository } from '../../test/auth/auth.service.spec';
 
 @Injectable()

@@ -3,9 +3,9 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiBasicAuth } from '@nestjs/swagger';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateAuthDto } from 'src/auth/dto/create-auth.dto';
-import { Payload } from 'src/auth/jwt/jwt.payload';
-import { AuthService } from '../../src/auth/auth.service';
+import { CreateAuthDto } from 'src/modules/auth/dto/create-auth.dto';
+import { Payload } from 'src/modules/auth/jwt/jwt.payload';
+import { AuthService } from '../../src/modules/auth/auth.service';
 
 export class FakeAuthRepository {
   async create(createAuthDto: CreateAuthDto): Promise<void> {
