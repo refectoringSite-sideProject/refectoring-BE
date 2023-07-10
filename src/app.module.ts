@@ -20,10 +20,10 @@ import { RecommentLike } from './entities/recommentLike.entity';
 import { Tier } from './entities/tier.entity';
 import { User } from './entities/user.entity';
 import { Post } from './entities/post.entity';
-
+import { Comment } from './entities/comment.entity';
+//
 @Module({
   imports: [
-    AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -49,12 +49,13 @@ import { Post } from './entities/post.entity';
           ],
           autoLoadEntities: true,
           charset: 'utf8mb4',
-          synchronize: true,
+          synchronize: false,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
         };
       },
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
