@@ -1,8 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { IAuthRepository } from './auth.IRepository';
 import { SignUpInputDto } from './dto/input/sign-up.input.dto';
+import { UserOutputDto } from './dto/output/user.output.dto';
 
 export class AuthRepository implements IAuthRepository {
   constructor(@InjectRepository(User) private userModel: Repository<User>) {}
@@ -17,12 +19,23 @@ export class AuthRepository implements IAuthRepository {
     await this.userModel.save(newUser);
   }
 
-  async findUserByEmail(signUpInputDto: SignUpInputDto) {
-    const email = signUpInputDto.email;
-    return await this.userModel.findOne({ where: { email } });
+  async findUserByEmail(email: string): Promise<UserOutputDto> {
+    const result = await this.userModel.findOne({ where: { email } });
+    return plainToInstance(UserOutputDto, result);
   }
 
-  findUserByIdWithoutPassword(userId: number) {
-    throw new Error('Method not implemented.');
+  async findUserByIdWithoutPassword(userId: number): Promise<UserOutputDto> {
+    const result = await this.userModel
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.email',
+        'user.nickName',
+        'user.point',
+        'user.TierId',
+      ])
+      .where('user.id = :id', { id: userId })
+      .getOne();
+    return plainToInstance(UserOutputDto, result);
   }
 }
