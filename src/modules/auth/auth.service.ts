@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { IAuthRepository } from './auth.IRepository';
 import { SignUpInputDto } from './dto/input/sign-up.input.dto';
 import * as bcrypt from 'bcrypt';
+import { SignInInputDto } from './dto/input/sign-in.input.dto';
+import { SignInOutputDto } from './dto/output/sign-in.output.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,9 +19,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(body: SignUpInputDto) {
+  async signUp(body: SignUpInputDto): Promise<void> {
     const { email, password, nickname } = body;
-    const user = await this.authRepository.findUserByEmail(body);
+    const user = await this.authRepository.findUserByEmail(email);
     if (user) {
       throw new BadRequestException('이미 존재하는 id입니다');
     }
@@ -32,40 +34,41 @@ export class AuthService {
     return;
   }
 
-  async signIn(body) {
-    const { userId, password } = body;
-    const user = await this.authRepository.findUserByEmail(userId);
+  async signIn(body: SignInInputDto): Promise<SignInOutputDto> {
+    const { email, password } = body;
+    const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
       throw new UnauthorizedException(
         '아이디 혹은 비밀번호가 올바르지 않습니다.',
       );
     }
-    if (password !== user.password) {
+    const isMatch = await bcrypt.compare(password, user._password);
+    if (!isMatch) {
       throw new UnauthorizedException(
         '아이디 혹은 비밀번호가 올바르지 않습니다.',
       );
     }
-
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user._email, sub: user._id };
     const accessToken = this.generateJwt(payload, 'access');
-    return { accessToken };
+    const refreshToken = this.generateJwt(payload, 'refresh');
+
+    return { accessToken, refreshToken };
   }
 
-  async generateJwt(payload, typeOfToken) {
+  generateJwt(payload, typeOfToken: string): string {
     if (typeOfToken === 'access') {
-      // console.log(process.env.SECRET_KEY_ACCESS);
       const accessToken = this.jwtService.sign(payload, {
-        secret: '왜안대',
-        expiresIn: '60m',
+        secret: process.env.SECRET_KEY_ACCESS,
+        expiresIn: process.env.EXPIRES_IN_ACCESS,
       });
-      return { accessToken };
+      return accessToken;
     }
     if (typeOfToken === 'refresh') {
       const refreshToken = this.jwtService.sign(payload, {
-        secret: '와이!!!!',
-        expiresIn: '12h',
+        secret: process.env.SECRET_KEY_REFRESH,
+        expiresIn: process.env.EXPIRES_IN_REFRESH,
       });
-      return { refreshToken };
+      return refreshToken;
     }
   }
 }
