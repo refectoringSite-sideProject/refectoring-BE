@@ -26,10 +26,6 @@ export class FakeAuthRepository implements IAuthRepository {
     }
     return;
   }
-  async findUserByIdWithoutPassword(userId: number): Promise<UserOutputDto> {
-    const result = { id: 1, userId: 'honggd@gmail.com' };
-    return plainToInstance(UserOutputDto, result);
-  }
 }
 
 describe('AuthService', () => {

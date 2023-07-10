@@ -23,19 +23,4 @@ export class AuthRepository implements IAuthRepository {
     const result = await this.userModel.findOne({ where: { email } });
     return plainToInstance(UserOutputDto, result);
   }
-
-  async findUserByIdWithoutPassword(userId: number): Promise<UserOutputDto> {
-    const result = await this.userModel
-      .createQueryBuilder('user')
-      .select([
-        'user.id',
-        'user.email',
-        'user.nickName',
-        'user.point',
-        'user.TierId',
-      ])
-      .where('user.id = :id', { id: userId })
-      .getOne();
-    return plainToInstance(UserOutputDto, result);
-  }
 }

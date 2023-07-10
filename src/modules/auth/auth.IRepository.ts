@@ -4,7 +4,6 @@ import { UserOutputDto } from './dto/output/user.output.dto';
 export interface IAuthRepository {
   create(signUpInputDto: SignUpInputDto): Promise<void>;
   findUserByEmail(email: string): Promise<UserOutputDto>;
-  findUserByIdWithoutPassword(userId: number): Promise<UserOutputDto>;
 }
 
 export const IAuthRepository = Symbol('IAuthRepository');
