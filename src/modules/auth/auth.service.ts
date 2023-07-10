@@ -1,32 +1,40 @@
-/* eslint-disable prettier/prettier */
 import {
+  Inject,
   BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FakeAuthRepository } from '../../../test/auth/auth.service.spec';
 import { JwtService } from '@nestjs/jwt';
-import { Payload } from './jwt/jwt.payload';
-// import { authRepository } from '../../test/auth/auth.service.spec';
+import { IAuthRepository } from './auth.IRepository';
+import { SignUpInputDto } from './dto/input/sign-up.input.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
-  authRepository: FakeAuthRepository;
+  constructor(
+    @Inject(IAuthRepository)
+    private readonly authRepository: IAuthRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async signUp(body) {
-    const { userId, password } = body;
-    const user = await this.authRepository.findUserById(userId);
+  async signUp(body: SignUpInputDto) {
+    const { email, password, nickname } = body;
+    const user = await this.authRepository.findUserByEmail(body);
     if (user) {
       throw new BadRequestException('이미 존재하는 id입니다');
     }
-
-    await this.authRepository.create(body);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await this.authRepository.create({
+      email,
+      password: hashedPassword,
+      nickname,
+    });
+    return;
   }
 
   async signIn(body) {
     const { userId, password } = body;
-    const user = await this.authRepository.findUserById(userId);
+    const user = await this.authRepository.findUserByEmail(userId);
     if (!user) {
       throw new UnauthorizedException(
         '아이디 혹은 비밀번호가 올바르지 않습니다.',
@@ -38,7 +46,7 @@ export class AuthService {
       );
     }
 
-    const payload = { userId: user.userId, sub: user.id };
+    const payload = { email: user.email, sub: user.id };
     const accessToken = this.generateJwt(payload, 'access');
     return { accessToken };
   }
