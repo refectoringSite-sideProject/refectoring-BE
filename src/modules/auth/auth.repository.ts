@@ -1,10 +1,8 @@
-/* eslint-disable prettier/prettier */
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { IAuthRepository } from './auth.IRepository';
 import { SignUpInputDto } from './dto/input/sign-up.input.dto';
-import { VerifyEmailInputDto } from './dto/input/verify-email.input.dto';
 
 export class AuthRepository implements IAuthRepository {
   constructor(@InjectRepository(User) private userModel: Repository<User>) {}
@@ -19,8 +17,8 @@ export class AuthRepository implements IAuthRepository {
     await this.userModel.save(newUser);
   }
 
-  async findUserByEmail(verifyEmailInputDto: VerifyEmailInputDto) {
-    const email = verifyEmailInputDto.email;
+  async findUserByEmail(signUpInputDto: SignUpInputDto) {
+    const email = signUpInputDto.email;
     return await this.userModel.findOne({ where: { email } });
   }
 

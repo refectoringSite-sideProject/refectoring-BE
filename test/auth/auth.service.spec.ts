@@ -1,20 +1,16 @@
-/* eslint-disable prettier/prettier */
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ApiBasicAuth } from '@nestjs/swagger';
 import { Test, TestingModule } from '@nestjs/testing';
 import { IAuthRepository } from 'src/modules/auth/auth.IRepository';
 import { SignUpInputDto } from 'src/modules/auth/dto/input/sign-up.input.dto';
-import { VerifyEmailInputDto } from 'src/modules/auth/dto/input/verify-email.input.dto';
-import { Payload } from 'src/modules/auth/jwt/jwt.payload';
 import { AuthService } from '../../src/modules/auth/auth.service';
 
 export class FakeAuthRepository implements IAuthRepository {
   async create(signUpInputDto: SignUpInputDto): Promise<void> {
     return;
   }
-  async findUserByEmail(verifyEmailInputDto: VerifyEmailInputDto) {
-    const email = verifyEmailInputDto.email;
+  async findUserByEmail(signUpInputDto: SignUpInputDto) {
+    const email = signUpInputDto.email;
     if (email === 'honggd@gmail.com') {
       return { id: 1, email: 'honggd@gmail.com', password: '1234' };
     }

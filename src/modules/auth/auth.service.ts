@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Inject,
   BadRequestException,
@@ -20,7 +19,7 @@ export class AuthService {
 
   async signUp(body: SignUpInputDto) {
     const { email, password, nickname } = body;
-    const user = await this.authRepository.findUserByEmail({ email });
+    const user = await this.authRepository.findUserByEmail(body);
     if (user) {
       throw new BadRequestException('이미 존재하는 id입니다');
     }
