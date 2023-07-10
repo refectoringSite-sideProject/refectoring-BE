@@ -20,6 +20,7 @@ import { Tier } from './entities/tier.entity';
 import { User } from './entities/user.entity';
 import { Post } from './entities/post.entity';
 import { Comment } from './entities/comment.entity';
+import { CategoryModule } from './modules/category/category.module';
 //
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { Comment } from './entities/comment.entity';
       },
     }),
     AuthModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
