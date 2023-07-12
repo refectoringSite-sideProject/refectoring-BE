@@ -21,6 +21,7 @@ import { User } from './entities/user.entity';
 import { Post } from './entities/post.entity';
 import { Comment } from './entities/comment.entity';
 import { CategoryModule } from './modules/category/category.module';
+import { CategoryLikeModule } from './modules/category-like/category-like.module';
 //
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { CategoryModule } from './modules/category/category.module';
     }),
     AuthModule,
     CategoryModule,
+    CategoryLikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
