@@ -9,8 +9,12 @@ export class CommentService {
     private readonly commentRepository: ICommentRepository
   ) {}
 
-  async createComment(body: CreateCommentInputDto) {
-    await this.commentRepository.createComment(body);
+  async createComment(
+    PostId: number,
+    body: CreateCommentInputDto,
+    UserId: number
+  ) {
+    await this.commentRepository.createComment(PostId, body, UserId);
     return;
   }
 }

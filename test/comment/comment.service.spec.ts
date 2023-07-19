@@ -4,7 +4,11 @@ import { ICommentRepository } from "../../src/modules/comment/comment.IRepositor
 import { CommentService } from "../../src/modules/comment/comment.service";
 
 export class FakeCommentRepository implements ICommentRepository {
-  async createComment(body: CreateCommentInputDto) {
+  async createComment(
+    PostId: number,
+    body: CreateCommentInputDto,
+    UserId: number
+  ) {
     return;
   }
 }
@@ -29,8 +33,10 @@ describe("CommentService", () => {
 
   describe("createComment", () => {
     it("코멘트를 생성한다 - 생성", async () => {
+      const PostId = 1;
+      const UserId = 1;
       const body = { content: "댓글 남기고 갑니다." };
-      const result = await commentService.createComment(body);
+      const result = await commentService.createComment(PostId, body, UserId);
       expect(result).toBeNull;
     });
   });
