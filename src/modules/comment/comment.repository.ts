@@ -3,6 +3,7 @@ import { Comment } from "src/entities/comment.entity";
 import { Repository } from "typeorm";
 import { ICommentRepository } from "./comment.IRepository";
 import { CreateCommentInputDto } from "./dto/input/create-comment.dto";
+import { UpdateCommentInputDto } from "./dto/input/update-comment.dto";
 
 export class CommentRepository implements ICommentRepository {
   constructor(
@@ -26,5 +27,15 @@ export class CommentRepository implements ICommentRepository {
   async findCommentsByPostId(PostId: number): Promise<Comment[]> {
     const result = await this.commentModel.find({ where: { PostId } });
     return result;
+  }
+
+  async updateComment(
+    CommentId: number,
+    body: UpdateCommentInputDto,
+    UserId: number
+  ) {
+    const content = body.content;
+    await this.commentModel.update({ id: CommentId, UserId }, { content });
+    return;
   }
 }

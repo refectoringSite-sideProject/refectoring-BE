@@ -3,6 +3,7 @@ import { CreateCommentInputDto } from "../../src/modules/comment/dto/input/creat
 import { ICommentRepository } from "../../src/modules/comment/comment.IRepository";
 import { CommentService } from "../../src/modules/comment/comment.service";
 import { Comment } from "src/entities/comment.entity";
+import { UpdateCommentInputDto } from "src/modules/comment/dto/input/update-comment.dto";
 
 export class FakeCommentRepository implements ICommentRepository {
   async createComment(
@@ -48,6 +49,14 @@ export class FakeCommentRepository implements ICommentRepository {
     ];
 
     return result;
+  }
+
+  async updateComment(
+    CommentId: number,
+    body: UpdateCommentInputDto,
+    UserId: number
+  ): Promise<void> {
+    return;
   }
 }
 
@@ -115,6 +124,18 @@ describe("CommentService", () => {
           Recomment: [],
         },
       ]);
+    });
+  });
+
+  describe("updateComment", () => {
+    it("댓글이 수정되어야 한다.", async () => {
+      const CommentId = 1;
+      const body = { content: "댓글 수정" };
+      const UserId = 1;
+
+      const result = commentService.updateComment(CommentId, body, UserId);
+
+      expect(result).toBeNull;
     });
   });
 });

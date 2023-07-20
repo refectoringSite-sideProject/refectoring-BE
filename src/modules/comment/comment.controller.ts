@@ -11,8 +11,10 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "src/common/decorators/user.decorator";
+import { Comment } from "src/entities/comment.entity";
 import { CommentService } from "./comment.service";
 import { CreateCommentInputDto } from "./dto/input/create-comment.dto";
+import { UpdateCommentInputDto } from "./dto/input/update-comment.dto";
 
 @ApiTags("Comment")
 @Controller("comment")
@@ -26,14 +28,28 @@ export class CommentController {
     @Param("postId") PostId: number,
     @Body() body: CreateCommentInputDto,
     @User() User
-  ) {
+  ): Promise<void> {
     await this.commentService.createComment(PostId, body, User.sub);
   }
 
   @ApiOperation({ summary: "게시글 번호로 댓글 조회 API" })
   @Get(":postId")
-  async getCommentsByPostId(@Param("postId") PostId: number) {
+  async getCommentsByPostId(
+    @Param("postId") PostId: number
+  ): Promise<Comment[]> {
     const result = await this.commentService.getCommentsByPostId(PostId);
     return result;
+  }
+
+  @ApiOperation({ summary: "댓글 수정 API" })
+  @Patch(":id")
+  @UseGuards(AuthGuard("jwt"))
+  async updateComment(
+    @Param("id") CommentId: number,
+    @Body() body: UpdateCommentInputDto,
+    @User() User
+  ): Promise<void> {
+    await this.commentService.updateComment(CommentId, body, User.sub);
+    return;
   }
 }
