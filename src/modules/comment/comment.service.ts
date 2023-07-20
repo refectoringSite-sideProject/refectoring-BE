@@ -17,4 +17,9 @@ export class CommentService {
     await this.commentRepository.createComment(PostId, body, UserId);
     return;
   }
+
+  async getCommentsByPostId(PostId: number) {
+    const result = await this.commentRepository.findCommentsByPostId(PostId);
+    return result;
+  }
 }

@@ -22,4 +22,9 @@ export class CommentRepository implements ICommentRepository {
     await this.commentModel.save(newComment);
     return;
   }
+
+  async findCommentsByPostId(PostId: number): Promise<Comment[]> {
+    const result = await this.commentModel.find({ where: { PostId } });
+    return result;
+  }
 }
