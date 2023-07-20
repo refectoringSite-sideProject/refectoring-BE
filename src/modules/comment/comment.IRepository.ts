@@ -16,6 +16,8 @@ export interface ICommentRepository {
     body: UpdateCommentInputDto,
     UserId: number
   ): Promise<void>;
+
+  deleteComment(CommentId: number, UserId: number): Promise<void>;
 }
 
 export const ICommentRepository = Symbol("ICommentRepository");

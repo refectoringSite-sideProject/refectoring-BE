@@ -38,4 +38,9 @@ export class CommentRepository implements ICommentRepository {
     await this.commentModel.update({ id: CommentId, UserId }, { content });
     return;
   }
+
+  async deleteComment(CommentId: number, UserId: number): Promise<void> {
+    await this.commentModel.delete({ id: CommentId, UserId });
+    return;
+  }
 }

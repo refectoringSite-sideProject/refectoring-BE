@@ -52,4 +52,15 @@ export class CommentController {
     await this.commentService.updateComment(CommentId, body, User.sub);
     return;
   }
+
+  @ApiOperation({ summary: "댓글 삭제 API" })
+  @Delete(":id")
+  @UseGuards(AuthGuard("jwt"))
+  async deleteComment(
+    @Param("id") CommentId: number,
+    @User() User
+  ): Promise<void> {
+    await this.commentService.deleteComment(CommentId, User.sub);
+    return;
+  }
 }

@@ -58,6 +58,10 @@ export class FakeCommentRepository implements ICommentRepository {
   ): Promise<void> {
     return;
   }
+
+  async deleteComment(CommentId: number, UserId: number): Promise<void> {
+    return;
+  }
 }
 
 describe("CommentService", () => {
@@ -134,6 +138,17 @@ describe("CommentService", () => {
       const UserId = 1;
 
       const result = commentService.updateComment(CommentId, body, UserId);
+
+      expect(result).toBeNull;
+    });
+  });
+
+  describe("deleteComment", () => {
+    it("댓글이 삭제되어야 한다.", async () => {
+      const CommentId = 1;
+      const UserId = 1;
+
+      const result = commentService.deleteComment(CommentId, UserId);
 
       expect(result).toBeNull;
     });

@@ -33,4 +33,9 @@ export class CommentService {
     await this.commentRepository.updateComment(CommentId, body, UserId);
     return;
   }
+
+  async deleteComment(CommentId: number, UserId: number): Promise<void> {
+    await this.commentRepository.deleteComment(CommentId, UserId);
+    return;
+  }
 }
