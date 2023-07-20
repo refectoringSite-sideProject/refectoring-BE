@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { LoggerMiddleware } from "./common/middleware/Logger.middleware";
@@ -22,6 +17,7 @@ import { Post } from "./entities/post.entity";
 import { Comment } from "./entities/comment.entity";
 import { CategoryModule } from "./modules/category/category.module";
 import { CategoryLikeModule } from "./modules/category-like/category-like.module";
+import { PostModule } from "./modules/post/post.module";
 //
 @Module({
   imports: [
@@ -59,6 +55,7 @@ import { CategoryLikeModule } from "./modules/category-like/category-like.module
     AuthModule,
     CategoryModule,
     CategoryLikeModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],
