@@ -18,7 +18,8 @@ import { Comment } from "./entities/comment.entity";
 import { CategoryModule } from "./modules/category/category.module";
 import { CategoryLikeModule } from "./modules/category-like/category-like.module";
 import { PostModule } from "./modules/post/post.module";
-//
+import { CommentModule } from "./modules/comment/comment.module";
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -56,6 +57,7 @@ import { PostModule } from "./modules/post/post.module";
     CategoryModule,
     CategoryLikeModule,
     PostModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
