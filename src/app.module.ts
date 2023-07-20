@@ -19,6 +19,7 @@ import { CategoryModule } from "./modules/category/category.module";
 import { CategoryLikeModule } from "./modules/category-like/category-like.module";
 import { PostModule } from "./modules/post/post.module";
 import { CommentModule } from "./modules/comment/comment.module";
+import { PostLikeModule } from "./modules/post-like/post-like.module";
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { CommentModule } from "./modules/comment/comment.module";
     CategoryModule,
     CategoryLikeModule,
     PostModule,
+    PostLikeModule,
     CommentModule,
   ],
   controllers: [AppController],
