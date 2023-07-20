@@ -1,29 +1,26 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { LoggerMiddleware } from './common/middleware/Logger.middleware';
-import { AuthModule } from './modules/auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from './entities/category.entity';
-import { CategoryLike } from './entities/categoryLike.entity';
-import { CommentLike } from './entities/commentLike.entity';
-import { PostLike } from './entities/postLike.entity';
-import { Recomment } from './entities/recomment.entity';
-import { RecommentLike } from './entities/recommentLike.entity';
-import { Tier } from './entities/tier.entity';
-import { User } from './entities/user.entity';
-import { Post } from './entities/post.entity';
-import { Comment } from './entities/comment.entity';
-import { CategoryModule } from './modules/category/category.module';
-import { CategoryLikeModule } from './modules/category-like/category-like.module';
-import { CommentModule } from './modules/comment/comment.module';
-//
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { LoggerMiddleware } from "./common/middleware/Logger.middleware";
+import { AuthModule } from "./modules/auth/auth.module";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Category } from "./entities/category.entity";
+import { CategoryLike } from "./entities/categoryLike.entity";
+import { CommentLike } from "./entities/commentLike.entity";
+import { PostLike } from "./entities/postLike.entity";
+import { Recomment } from "./entities/recomment.entity";
+import { RecommentLike } from "./entities/recommentLike.entity";
+import { Tier } from "./entities/tier.entity";
+import { User } from "./entities/user.entity";
+import { Post } from "./entities/post.entity";
+import { Comment } from "./entities/comment.entity";
+import { CategoryModule } from "./modules/category/category.module";
+import { CategoryLikeModule } from "./modules/category-like/category-like.module";
+import { PostModule } from "./modules/post/post.module";
+import { CommentModule } from "./modules/comment/comment.module";
+import { PostLikeModule } from "./modules/post-like/post-like.module";
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -60,6 +57,8 @@ import { CommentModule } from './modules/comment/comment.module';
     AuthModule,
     CategoryModule,
     CategoryLikeModule,
+    PostModule,
+    PostLikeModule,
     CommentModule,
   ],
   controllers: [AppController],
