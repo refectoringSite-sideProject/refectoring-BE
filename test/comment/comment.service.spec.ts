@@ -1,9 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { CreateCommentInputDto } from "../../src/modules/comment/dto/input/create-comment.dto";
+import { CreateCommentInputDto } from "../../src/modules/comment/dto/input/create-comment.input.dto";
 import { ICommentRepository } from "../../src/modules/comment/comment.IRepository";
 import { CommentService } from "../../src/modules/comment/comment.service";
 import { Comment } from "src/entities/comment.entity";
-import { UpdateCommentInputDto } from "src/modules/comment/dto/input/update-comment.dto";
+import { UpdateCommentInputDto } from "src/modules/comment/dto/input/update-comment.input.dto";
+import { CommentOutputDto } from "../../src/modules/comment/dto/output/comment.output.dto";
+import { plainToInstance } from "class-transformer";
+import { BadRequestException } from "@nestjs/common";
 
 export class FakeCommentRepository implements ICommentRepository {
   async createComment(
@@ -60,6 +63,17 @@ export class FakeCommentRepository implements ICommentRepository {
   }
 
   async deleteComment(CommentId: number, UserId: number): Promise<void> {
+    return;
+  }
+
+  async findOneCommentById(CommentId: number): Promise<CommentOutputDto> {
+    if (CommentId === 1) {
+      const result = {
+        id: 1,
+        content: "댓글 1",
+      };
+      return plainToInstance(CommentOutputDto, result);
+    }
     return;
   }
 }
@@ -132,6 +146,18 @@ describe("CommentService", () => {
   });
 
   describe("updateComment", () => {
+    it("존재하지 않는 댓글이라면 에러를 발생시킨다.", async () => {
+      const CommentId = 2;
+      const body = { content: "댓글 수정" };
+      const UserId = 1;
+
+      await expect(
+        commentService.updateComment(CommentId, body, UserId)
+      ).rejects.toThrowError(
+        new BadRequestException("존재하지 않는 댓글입니다.")
+      );
+    });
+
     it("댓글이 수정되어야 한다.", async () => {
       const CommentId = 1;
       const body = { content: "댓글 수정" };
@@ -144,6 +170,17 @@ describe("CommentService", () => {
   });
 
   describe("deleteComment", () => {
+    it("존재하지 않는 댓글이라면 에러를 발생시킨다.", async () => {
+      const CommentId = 2;
+      const UserId = 1;
+
+      await expect(
+        commentService.deleteComment(CommentId, UserId)
+      ).rejects.toThrowError(
+        new BadRequestException("존재하지 않는 댓글입니다.")
+      );
+    });
+
     it("댓글이 삭제되어야 한다.", async () => {
       const CommentId = 1;
       const UserId = 1;

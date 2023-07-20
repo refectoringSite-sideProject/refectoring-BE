@@ -1,9 +1,11 @@
 import { InjectRepository } from "@nestjs/typeorm";
+import { plainToInstance } from "class-transformer";
 import { Comment } from "src/entities/comment.entity";
 import { Repository } from "typeorm";
 import { ICommentRepository } from "./comment.IRepository";
-import { CreateCommentInputDto } from "./dto/input/create-comment.dto";
-import { UpdateCommentInputDto } from "./dto/input/update-comment.dto";
+import { CreateCommentInputDto } from "./dto/input/create-comment.input.dto";
+import { UpdateCommentInputDto } from "./dto/input/update-comment.input.dto";
+import { CommentOutputDto } from "./dto/output/comment.output.dto";
 
 export class CommentRepository implements ICommentRepository {
   constructor(
@@ -42,5 +44,12 @@ export class CommentRepository implements ICommentRepository {
   async deleteComment(CommentId: number, UserId: number): Promise<void> {
     await this.commentModel.delete({ id: CommentId, UserId });
     return;
+  }
+
+  async findOneCommentById(CommentId: number): Promise<CommentOutputDto> {
+    const result = await this.commentModel.findOne({
+      where: { id: CommentId },
+    });
+    return plainToInstance(CommentOutputDto, result);
   }
 }

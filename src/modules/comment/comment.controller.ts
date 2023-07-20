@@ -13,8 +13,8 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "src/common/decorators/user.decorator";
 import { Comment } from "src/entities/comment.entity";
 import { CommentService } from "./comment.service";
-import { CreateCommentInputDto } from "./dto/input/create-comment.dto";
-import { UpdateCommentInputDto } from "./dto/input/update-comment.dto";
+import { CreateCommentInputDto } from "./dto/input/create-comment.input.dto";
+import { UpdateCommentInputDto } from "./dto/input/update-comment.input.dto";
 
 @ApiTags("Comment")
 @Controller("comment")

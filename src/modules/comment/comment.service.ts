@@ -1,8 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { Comment } from "src/entities/comment.entity";
 import { ICommentRepository } from "./comment.IRepository";
-import { CreateCommentInputDto } from "./dto/input/create-comment.dto";
-import { UpdateCommentInputDto } from "./dto/input/update-comment.dto";
+import { CreateCommentInputDto } from "./dto/input/create-comment.input.dto";
+import { UpdateCommentInputDto } from "./dto/input/update-comment.input.dto";
 
 @Injectable()
 export class CommentService {
@@ -30,11 +30,19 @@ export class CommentService {
     body: UpdateCommentInputDto,
     UserId: number
   ): Promise<void> {
+    const comment = await this.commentRepository.findOneCommentById(CommentId);
+    if (!comment) {
+      throw new BadRequestException("존재하지 않는 댓글입니다.");
+    }
     await this.commentRepository.updateComment(CommentId, body, UserId);
     return;
   }
 
   async deleteComment(CommentId: number, UserId: number): Promise<void> {
+    const comment = await this.commentRepository.findOneCommentById(CommentId);
+    if (!comment) {
+      throw new BadRequestException("존재하지 않는 댓글입니다.");
+    }
     await this.commentRepository.deleteComment(CommentId, UserId);
     return;
   }
