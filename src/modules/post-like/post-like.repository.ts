@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Post } from "../../../src/entities/post.entity";
+import { Post } from "../../entities/post.entity";
 import { Repository } from "typeorm";
 import { IPostLikeRepository } from "./post-like.IRepository";
 import { PostOutputDto } from "./dto/output/post.output.dto";
 import { PostLikeOutputDto } from "./dto/output/postLike.output.dto";
-import { PostLike } from "../../../src/entities/postLike.entity";
+import { PostLike } from "../../entities/postLike.entity";
 
 @Injectable()
 export class PostLikeRepository implements IPostLikeRepository {
