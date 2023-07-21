@@ -3,6 +3,8 @@ import { plainToInstance } from "class-transformer";
 import { ICommentLikeRepository } from "../../src/modules/comment-like/comment-like.IRepository";
 import { CommentLikeOutputDto } from "../../src/modules/comment-like/dto/output/comment-like.output.dto";
 import { CommentLikeService } from "../../src/modules/comment-like/comment-like.service";
+import { CommentOutputDto } from "../../src/modules/comment-like/dto/output/comment.output.dto";
+import { BadRequestException } from "@nestjs/common";
 
 const CommentLikeMockData = {
   commentLike: {
@@ -10,21 +12,40 @@ const CommentLikeMockData = {
     CommentId: 1,
     UserId: 1,
   },
+  comment: {
+    id: 1,
+    content: "content",
+    UserId: 1,
+    PostId: 1,
+  },
 };
 
 export class FakeCommentLikeRepository implements ICommentLikeRepository {
-  findCommentLike(CommentId: number, UserId: number): CommentLikeOutputDto {
+  async findCommentLike(
+    CommentId: number,
+    UserId: number
+  ): Promise<CommentLikeOutputDto> {
     if (CommentId === 1 && UserId === 1) {
       return plainToInstance(
         CommentLikeOutputDto,
         CommentLikeMockData.commentLike
       );
     }
-  }
-  createCommentLike(CommentId: number, UserId: number): Promise<void> {
     return;
   }
-  deleteCommentLike(CommentLikeId: number): Promise<void> {
+  async createCommentLike(CommentId: number, UserId: number): Promise<void> {
+    return;
+  }
+  async deleteCommentLike(CommentLikeId: number): Promise<void> {
+    return;
+  }
+
+  async findOneCommentByCommentId(
+    CommentId: number
+  ): Promise<CommentOutputDto> {
+    if (CommentId === 1) {
+      return plainToInstance(CommentOutputDto, CommentLikeMockData.comment);
+    }
     return;
   }
 }
@@ -65,6 +86,17 @@ describe("CommentLikeService", () => {
 
       const result = await commentLikeService.commentLike(CommentId, UserId);
       expect(result).toBeNull;
+    });
+
+    it("존재하지 않는 댓글번호로 요청을 보냈을 때 - 실패", async () => {
+      const CommentId = 20;
+      const UserId = 1;
+
+      await expect(
+        commentLikeService.commentLike(CommentId, UserId)
+      ).rejects.toThrowError(
+        new BadRequestException("존재하지 않는 댓글입니다.")
+      );
     });
   });
 });

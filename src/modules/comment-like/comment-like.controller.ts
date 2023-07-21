@@ -12,7 +12,11 @@ export class CommentLikeController {
   @ApiOperation({ summary: "댓글 좋아요 기능" })
   @Post("/:CommentId")
   @UseGuards(AuthGuard("jwt"))
-  commentLike(@Param("CommentId") CommentId: number, @User() user) {
-    return this.commentLikeService.commentLike(CommentId, user.sub);
+  async commentLike(
+    @Param("CommentId") CommentId: number,
+    @User() user
+  ): Promise<void> {
+    await this.commentLikeService.commentLike(CommentId, user.sub);
+    return;
   }
 }

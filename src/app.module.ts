@@ -20,6 +20,7 @@ import { CategoryLikeModule } from "./modules/category-like/category-like.module
 import { PostModule } from "./modules/post/post.module";
 import { CommentModule } from "./modules/comment/comment.module";
 import { PostLikeModule } from "./modules/post-like/post-like.module";
+import { CommentLikeModule } from "./modules/comment-like/comment-like.module";
 
 @Module({
   imports: [
@@ -28,12 +29,12 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          type: 'mysql',
-          host: 'localhost',
+          type: "mysql",
+          host: "localhost",
           port: 3306,
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          database: configService.get('DB_DATABASE'),
+          username: configService.get("DB_USERNAME"),
+          password: configService.get("DB_PASSWORD"),
+          database: configService.get("DB_DATABASE"),
           entities: [
             Category,
             CategoryLike,
@@ -47,7 +48,7 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
             User,
           ],
           autoLoadEntities: true,
-          charset: 'utf8mb4',
+          charset: "utf8mb4",
           synchronize: false,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
@@ -60,6 +61,7 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
     PostModule,
     PostLikeModule,
     CommentModule,
+    CommentLikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -69,6 +71,6 @@ export class AppModule implements NestModule {
     consumer
       .apply(LoggerMiddleware)
       // .exclude({ path: '/', method: RequestMethod.GET })
-      .forRoutes('*');
+      .forRoutes("*");
   }
 }
