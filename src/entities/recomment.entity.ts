@@ -19,10 +19,10 @@ export class Recomment {
   content: string;
 
   @Column("int", { name: "CommentId" })
-  CommentId: string;
+  CommentId: number;
 
   @Column("int", { name: "UserId" })
-  UserId: string;
+  UserId: number;
 
   @ManyToOne(() => Comment, (Comment) => Comment.Recomment, {
     onDelete: "CASCADE",
