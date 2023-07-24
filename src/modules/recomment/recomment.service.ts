@@ -1,6 +1,7 @@
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { CreateRecommentInputDto } from "./dto/input/create-recommnet.input.dto";
+import { UpdateRecommentInputDto } from "./dto/input/update-recomment.input.dto";
 import { RecommentOutputDto } from "./dto/output/recomment.output.dto";
 import { IRecommentRepository } from "./recomment.IRepository";
 
@@ -40,5 +41,21 @@ export class RecommentService {
       CommentId
     );
     return plainToInstance(RecommentOutputDto, result);
+  }
+
+  async updateRecomment(
+    RecommentId: number,
+    body: UpdateRecommentInputDto,
+    UserId: number
+  ): Promise<void> {
+    const recomment = await this.recommentRepository.findOneRecommentById(
+      RecommentId
+    );
+    if (!recomment) {
+      throw new BadRequestException("존재하지 않는 대댓글입니다.");
+    }
+
+    await this.recommentRepository.updateRecomment(RecommentId, body, UserId);
+    return;
   }
 }

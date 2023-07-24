@@ -6,13 +6,12 @@ import { CreateRecommentInputDto } from "../../src/modules/recomment/dto/input/c
 import { IRecommentRepository } from "../../src/modules/recomment/recomment.IRepository";
 import { RecommentService } from "../../src/modules/recomment/recomment.service";
 import { RecommentOutputDto } from "../../src/modules/recomment/dto/output/recomment.output.dto";
+import { UpdateRecommentInputDto } from "src/modules/recomment/dto/input/update-recomment.input.dto";
 
 const RecommentMockData = {
   comment: {
     id: 1,
     content: "content",
-    UserId: 1,
-    PostId: 1,
   },
 
   recomments: [
@@ -29,6 +28,11 @@ const RecommentMockData = {
       content: "대댓글 3",
     },
   ],
+
+  recomment: {
+    id: 1,
+    content: "대댓글 1",
+  },
 };
 
 export class FakeRecommnetRepository implements IRecommentRepository {
@@ -53,11 +57,27 @@ export class FakeRecommnetRepository implements IRecommentRepository {
     if (CommentId === 1) {
       return plainToInstance(RecommentOutputDto, RecommentMockData.recomments);
     }
+    return;
+  }
+
+  async updateRecomment(
+    RecommentId: number,
+    body: UpdateRecommentInputDto,
+    UserId: number
+  ): Promise<void> {
+    return;
+  }
+
+  async findOneRecommentById(RecommentId: number): Promise<RecommentOutputDto> {
+    if (RecommentId === 1) {
+      return plainToInstance(RecommentOutputDto, RecommentMockData.recomment);
+    }
+    return;
   }
 }
 
 describe("RecommentService", () => {
-  let recommetService: RecommentService;
+  let recommentService: RecommentService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -67,11 +87,11 @@ describe("RecommentService", () => {
       ],
     }).compile();
 
-    recommetService = module.get<RecommentService>(RecommentService);
+    recommentService = module.get<RecommentService>(RecommentService);
   });
 
   it("should be defined", () => {
-    expect(recommetService).toBeDefined();
+    expect(recommentService).toBeDefined();
   });
 
   describe("createRecomment", () => {
@@ -82,7 +102,7 @@ describe("RecommentService", () => {
       const CommentId = 500;
 
       await expect(
-        recommetService.createRecomment(CommentId, body, UserId)
+        recommentService.createRecomment(CommentId, body, UserId)
       ).rejects.toThrowError(
         new BadRequestException("존재하지 않는 댓글입니다.")
       );
@@ -90,7 +110,7 @@ describe("RecommentService", () => {
 
     it("대댓글을 생성한다 - 성공", async () => {
       const CommentId = 1;
-      const result = await recommetService.createRecomment(
+      const result = await recommentService.createRecomment(
         CommentId,
         body,
         UserId
@@ -104,7 +124,7 @@ describe("RecommentService", () => {
       const CommentId = 20;
 
       await expect(
-        recommetService.getRecommentsByCommentId(CommentId)
+        recommentService.getRecommentsByCommentId(CommentId)
       ).rejects.toThrowError(
         new BadRequestException("존재하지 않는 댓글입니다.")
       );
@@ -113,8 +133,33 @@ describe("RecommentService", () => {
     it("댓글 번호로 대댓글을 조회한다", async () => {
       const CommentId = 1;
 
-      const result = await recommetService.getRecommentsByCommentId(CommentId);
+      const result = await recommentService.getRecommentsByCommentId(CommentId);
       expect(result).toEqual(RecommentMockData.recomments);
+    });
+  });
+
+  describe("updateRecomment", () => {
+    const body = { content: "대댓글 수정" };
+    const UserId = 1;
+
+    it("존재하지 않는 대댓글번호로 요청을 보냈을 때 - 실패", async () => {
+      const RecommentId = 2;
+
+      await expect(
+        recommentService.updateRecomment(RecommentId, body, UserId)
+      ).rejects.toThrowError(
+        new BadRequestException("존재하지 않는 대댓글입니다.")
+      );
+    });
+    it("대댓글이 수정되어야 한다 - 성공", async () => {
+      const RecommentId = 1;
+
+      const result = await recommentService.updateRecomment(
+        RecommentId,
+        body,
+        UserId
+      );
+      expect(result).toBeNull;
     });
   });
 });
