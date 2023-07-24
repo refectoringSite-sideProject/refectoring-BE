@@ -21,6 +21,8 @@ export interface IRecommentRepository {
   ): Promise<void>;
 
   findOneRecommentById(RecommentId: number): Promise<RecommentOutputDto>;
+
+  deleteRecomment(RecommentId: number, UserId: number): Promise<void>;
 }
 
 export const IRecommentRepository = Symbol("IRecommentRepository");

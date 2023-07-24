@@ -58,4 +58,16 @@ export class RecommentService {
     await this.recommentRepository.updateRecomment(RecommentId, body, UserId);
     return;
   }
+
+  async deleteRecomment(RecommentId: number, UserId: number) {
+    const recomment = await this.recommentRepository.findOneRecommentById(
+      RecommentId
+    );
+    if (!recomment) {
+      throw new BadRequestException("존재하지 않는 대댓글입니다.");
+    }
+
+    await this.recommentRepository.deleteRecomment(RecommentId, UserId);
+    return;
+  }
 }

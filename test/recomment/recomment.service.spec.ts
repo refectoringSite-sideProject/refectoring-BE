@@ -74,6 +74,10 @@ export class FakeRecommnetRepository implements IRecommentRepository {
     }
     return;
   }
+
+  async deleteRecomment(RecommentId: number, UserId: number): Promise<void> {
+    return;
+  }
 }
 
 describe("RecommentService", () => {
@@ -157,6 +161,30 @@ describe("RecommentService", () => {
       const result = await recommentService.updateRecomment(
         RecommentId,
         body,
+        UserId
+      );
+      expect(result).toBeNull;
+    });
+  });
+
+  describe("deleteRecomment", () => {
+    const UserId = 1;
+
+    it("존재하지 않는 대댓글번호로 요청을 보냈을 때 - 실패", async () => {
+      const RecommentId = 2;
+
+      await expect(
+        recommentService.deleteRecomment(RecommentId, UserId)
+      ).rejects.toThrowError(
+        new BadRequestException("존재하지 않는 대댓글입니다.")
+      );
+    });
+
+    it("댓글이 삭제되어야 한다 - 성공", async () => {
+      const RecommentId = 1;
+
+      const result = await recommentService.deleteRecomment(
+        RecommentId,
         UserId
       );
       expect(result).toBeNull;
