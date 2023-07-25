@@ -1,7 +1,12 @@
-import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { LoggerMiddleware } from "./common/middleware/Logger.middleware";
+import { LoggerMiddleware } from "./common/middleware/logger.middleware";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -19,6 +24,8 @@ import { CategoryModule } from "./modules/category/category.module";
 import { CategoryLikeModule } from "./modules/category-like/category-like.module";
 import { PostModule } from "./modules/post/post.module";
 import { CommentModule } from "./modules/comment/comment.module";
+import { PostLikeModule } from "./modules/post-like/post-like.module";
+import { CommentLikeModule } from "./modules/comment-like/comment-like.module";
 
 @Module({
   imports: [
@@ -47,7 +54,7 @@ import { CommentModule } from "./modules/comment/comment.module";
           ],
           autoLoadEntities: true,
           charset: "utf8mb4",
-          synchronize: false,
+          synchronize: true,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
         };
@@ -57,7 +64,9 @@ import { CommentModule } from "./modules/comment/comment.module";
     CategoryModule,
     CategoryLikeModule,
     PostModule,
+    PostLikeModule,
     CommentModule,
+    CommentLikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -66,7 +75,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      // .exclude({ path: '/', method: RequestMethod.GET })
+      .exclude({ path: "/", method: RequestMethod.GET })
       .forRoutes("*");
   }
 }

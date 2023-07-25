@@ -1,8 +1,11 @@
 import { InjectRepository } from "@nestjs/typeorm";
+import { plainToInstance } from "class-transformer";
 import { Comment } from "src/entities/comment.entity";
 import { Repository } from "typeorm";
 import { ICommentRepository } from "./comment.IRepository";
-import { CreateCommentInputDto } from "./dto/input/create-comment.dto";
+import { CreateCommentInputDto } from "./dto/input/create-comment.input.dto";
+import { UpdateCommentInputDto } from "./dto/input/update-comment.input.dto";
+import { CommentOutputDto } from "./dto/output/comment.output.dto";
 
 export class CommentRepository implements ICommentRepository {
   constructor(
@@ -21,5 +24,32 @@ export class CommentRepository implements ICommentRepository {
     newComment.UserId = UserId;
     await this.commentModel.save(newComment);
     return;
+  }
+
+  async findCommentsByPostId(PostId: number): Promise<Comment[]> {
+    const result = await this.commentModel.find({ where: { PostId } });
+    return result;
+  }
+
+  async updateComment(
+    CommentId: number,
+    body: UpdateCommentInputDto,
+    UserId: number
+  ) {
+    const content = body.content;
+    await this.commentModel.update({ id: CommentId, UserId }, { content });
+    return;
+  }
+
+  async deleteComment(CommentId: number, UserId: number): Promise<void> {
+    await this.commentModel.delete({ id: CommentId, UserId });
+    return;
+  }
+
+  async findOneCommentById(CommentId: number): Promise<CommentOutputDto> {
+    const result = await this.commentModel.findOne({
+      where: { id: CommentId },
+    });
+    return plainToInstance(CommentOutputDto, result);
   }
 }
