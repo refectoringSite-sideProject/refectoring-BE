@@ -25,6 +25,7 @@ import { CategoryLikeModule } from "./modules/category-like/category-like.module
 import { PostModule } from "./modules/post/post.module";
 import { CommentModule } from "./modules/comment/comment.module";
 import { PostLikeModule } from "./modules/post-like/post-like.module";
+import { CommentLikeModule } from "./modules/comment-like/comment-like.module";
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
     PostModule,
     PostLikeModule,
     CommentModule,
+    CommentLikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
