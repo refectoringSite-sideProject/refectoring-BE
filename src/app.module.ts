@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { LoggerMiddleware } from "./common/middleware/Logger.middleware";
@@ -28,12 +33,12 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          type: 'mysql',
-          host: 'localhost',
+          type: "mysql",
+          host: "localhost",
           port: 3306,
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          database: configService.get('DB_DATABASE'),
+          username: configService.get("DB_USERNAME"),
+          password: configService.get("DB_PASSWORD"),
+          database: configService.get("DB_DATABASE"),
           entities: [
             Category,
             CategoryLike,
@@ -47,7 +52,7 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
             User,
           ],
           autoLoadEntities: true,
-          charset: 'utf8mb4',
+          charset: "utf8mb4",
           synchronize: false,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
@@ -68,7 +73,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      // .exclude({ path: '/', method: RequestMethod.GET })
-      .forRoutes('*');
+      .exclude({ path: "/", method: RequestMethod.GET })
+      .forRoutes("*");
   }
 }
