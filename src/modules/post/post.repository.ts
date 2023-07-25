@@ -52,6 +52,9 @@ export class PostRepository implements IPostRepository {
       .select([
         "post.id",
         "post.title",
+        "post.content",
+        "post.UserId",
+        "post.CategoryId",
         "COUNT(comment.id) as commentCount",
         "COUNT(postLike.id) as likeCount",
       ])
@@ -75,8 +78,13 @@ export class PostRepository implements IPostRepository {
         "post.id",
         "post.title",
         "post.content",
+        "post.UserId",
+        "post.CategoryId",
         "user.id",
+        "user.email",
         "user.nickname",
+        "user.point",
+        "user.TierId",
         "COUNT(postLike.id) as likeCount",
       ])
       .groupBy("postid")
