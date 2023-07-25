@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { LoggerMiddleware } from "./common/middleware/Logger.middleware";
+import { LoggerMiddleware } from "./common/middleware/logger.middleware";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
