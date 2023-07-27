@@ -3,8 +3,7 @@ import { RecommentOutputDto } from "./dto/output/recomment.output.dto";
 
 export interface IRecommentLikeRepository {
   findOneRecommentByRecommentId(
-    RecommentId: number,
-    UserId: number
+    RecommentId: number
   ): Promise<RecommentOutputDto>;
 
   findRecommentLike(
@@ -14,7 +13,7 @@ export interface IRecommentLikeRepository {
 
   createRecommentLike(RecommentId: number, UserId: number): Promise<void>;
 
-  deleteRecommentLike(RecommentId: number, UserId: number): Promise<void>;
+  deleteRecommentLike(RecommentLikeId: number): Promise<void>;
 }
 
 export const IRecommentLikeRepository = Symbol("IRecommentLikeRepository");

@@ -11,8 +11,7 @@ export class RecommentLikeService {
   async recommentLike(RecommentId: number, UserId: number): Promise<void> {
     const recomment =
       await this.recommentLikeRepository.findOneRecommentByRecommentId(
-        RecommentId,
-        UserId
+        RecommentId
       );
     if (!recomment) {
       throw new BadRequestException("존재하지 않는 댓글입니다.");
@@ -30,7 +29,7 @@ export class RecommentLikeService {
       );
     }
     if (recommentLike) {
-      await this.recommentLikeRepository.deleteRecommentLike;
+      await this.recommentLikeRepository.deleteRecommentLike(recommentLike._id);
     }
 
     return;

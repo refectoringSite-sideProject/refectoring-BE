@@ -51,10 +51,7 @@ export class FakeRecommentLikeRepository implements IRecommentLikeRepository {
     return;
   }
 
-  async deleteRecommentLike(
-    RecommentId: number,
-    UserId: number
-  ): Promise<void> {
+  async deleteRecommentLike(RecommentLikeId: number): Promise<void> {
     return;
   }
 }
