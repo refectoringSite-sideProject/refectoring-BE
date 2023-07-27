@@ -1,8 +1,8 @@
 export class CategoryListOutputDto {
-  private id: number;
-  private category: number;
+  private category_id: number;
+  private category_category: number;
 
   get _category() {
-    return this.category;
+    return this.category_category;
   }
 }

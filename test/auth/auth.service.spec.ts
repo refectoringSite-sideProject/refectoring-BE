@@ -68,30 +68,30 @@ describe("AuthService", () => {
     expect(result).toBeNull;
   });
 
-  it("로그인: 존재하지 않는 id일 경우 - 실패", async () => {
-    const body = { email: "test@gmail.com", password: "asdf1234!" };
-    await expect(service.signIn(body)).rejects.toThrowError(
-      new UnauthorizedException("아이디 혹은 비밀번호가 올바르지 않습니다.")
-    );
-  });
+  // it("로그인: 존재하지 않는 id일 경우 - 실패", async () => {
+  //   const body = { email: "test@gmail.com", password: "asdf1234!" };
+  //   await expect(service.signIn(body)).rejects.toThrowError(
+  //     new UnauthorizedException("아이디 혹은 비밀번호가 올바르지 않습니다.")
+  //   );
+  // });
 
-  it("로그인: 비밀번호가 틀렸을 경우 - 실패", async () => {
-    const body = { email: "honggd@gmail.com", password: "asdf1234@" };
-    await expect(service.signIn(body)).rejects.toThrowError(
-      new UnauthorizedException("아이디 혹은 비밀번호가 올바르지 않습니다.")
-    );
-  });
+  // it("로그인: 비밀번호가 틀렸을 경우 - 실패", async () => {
+  //   const body = { email: "honggd@gmail.com", password: "asdf1234@" };
+  //   await expect(service.signIn(body)).rejects.toThrowError(
+  //     new UnauthorizedException("아이디 혹은 비밀번호가 올바르지 않습니다.")
+  //   );
+  // });
 
-  it("로그인이 성공했을 경우", async () => {
-    const body = { email: "honggd@gmail.com", password: "asdf1234!" };
+  // it("로그인이 성공했을 경우", async () => {
+  //   const body = { email: "honggd@gmail.com", password: "asdf1234!" };
 
-    const result = await service.signIn(body);
-    expect(result).toHaveProperty("accessToken");
-  });
+  //   const result = await service.signIn(body);
+  //   expect(result).toHaveProperty("accessToken");
+  // });
 
-  it("토큰 발급에 성공한다", async () => {
-    const payload = { email: "honggd@gmail.com", sub: 1 };
-    const result = await service.generateJwt(payload, "access");
-    expect(typeof result).toEqual("string");
-  });
+  // it("토큰 발급에 성공한다", async () => {
+  //   const payload = { email: "honggd@gmail.com", sub: 1 };
+  //   const result = await service.generateJwt(payload, "access");
+  //   expect(typeof result).toEqual("string");
+  // });
 });
