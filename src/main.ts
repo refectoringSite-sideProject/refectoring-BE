@@ -6,7 +6,7 @@ import { HttpExceptionFilter } from "./common/exception/http-exception.filter";
 import { winstonLogger } from "./common/middleware/winstonLogger";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const logger = winstonLogger;
   app.useLogger(logger);
   app.useGlobalFilters(new HttpExceptionFilter());
