@@ -5,41 +5,47 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Tier } from './tier.entity';
-import { Comment } from './comment.entity';
-import { CategoryLike } from './categoryLike.entity';
-import { CommentLike } from './commentLike.entity';
-import { Post } from './post.entity';
-import { PostLike } from './postLike.entity';
-import { Recomment } from './recomment.entity';
-import { RecommentLike } from './recommentLike.entity';
+} from "typeorm";
+import { Tier } from "./tier.entity";
+import { Comment } from "./comment.entity";
+import { CategoryLike } from "./categoryLike.entity";
+import { CommentLike } from "./commentLike.entity";
+import { Post } from "./post.entity";
+import { PostLike } from "./postLike.entity";
+import { Recomment } from "./recomment.entity";
+import { RecommentLike } from "./recommentLike.entity";
 
-@Entity('User')
+@Entity("User")
 export class User {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column('varchar', { name: 'email' })
+  @Column("varchar", { name: "email", nullable: true })
   email: string;
 
-  @Column('varchar', { name: 'password' })
+  @Column("varchar", { name: "socialId" })
+  socialId: string;
+
+  @Column("varchar", { name: "password", nullable: true })
   password: string;
 
-  @Column('int', { name: 'point' })
+  @Column("int", { name: "point" })
   point: number;
 
-  @Column('varchar', { name: 'nickname' })
+  @Column("varchar", { name: "nickname" })
   nickname: string;
 
-  @Column('int', { name: 'TierId' })
+  @Column("varchar", { name: "profileImg" })
+  profileImg: string;
+
+  @Column("int", { name: "TierId" })
   TierId: number;
 
   @ManyToOne(() => Tier, (Tier) => Tier.User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
-  @JoinColumn([{ name: 'TierId', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: "TierId", referencedColumnName: "id" }])
   Tier: Tier;
 
   @OneToMany(() => Comment, (Comment) => Comment.User)
