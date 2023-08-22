@@ -1,17 +1,5 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Req,
-  Res,
-  Get,
-  Param,
-} from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+import { Controller, Post, Body, Param } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
-import { KakaoRequest } from "./auth.interface";
 import { AuthService } from "./auth.service";
 import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignUpInputDto } from "./dto/input/sign-up.input.dto";

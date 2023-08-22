@@ -10,8 +10,6 @@ import { SignUpInputDto } from "./dto/input/sign-up.input.dto";
 import * as bcrypt from "bcrypt";
 import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
-import { KakaoRequest } from "./auth.interface";
-import { Response } from "express";
 import axios from "axios";
 import { Payload } from "./jwt/jwt.payload";
 
@@ -78,7 +76,6 @@ export class AuthService {
 
   async kakaoLogin(code: string): Promise<SignInOutputDto> {
     const kakaoUser = await this.getKakaoUserInfo(code);
-    console.log(`[kakaoLogin]kakaoUser: ${kakaoUser.id}`);
     let user = await this.authRepository.findUserBySocialId(kakaoUser.id);
 
     if (!user) {

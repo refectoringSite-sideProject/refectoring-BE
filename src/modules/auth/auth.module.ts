@@ -7,7 +7,6 @@ import { AuthRepository } from "./auth.repository";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "src/entities/user.entity";
 import { JwtStrategy } from "./jwt/jwt.strategy";
-import { JwtKakaoStrategy } from "./jwt/jwt.kakao.strategy";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -16,7 +15,6 @@ import { JwtKakaoStrategy } from "./jwt/jwt.kakao.strategy";
     JwtService,
     AuthService,
     JwtStrategy,
-    JwtKakaoStrategy,
     { provide: IAuthRepository, useClass: AuthRepository },
   ],
 })
