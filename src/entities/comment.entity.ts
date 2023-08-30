@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Post } from "./post.entity";
@@ -24,6 +26,12 @@ export class Comment {
 
   @Column("int", { name: "PostId" })
   PostId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(() => User, (User) => User.Comment, {
     onDelete: "CASCADE",

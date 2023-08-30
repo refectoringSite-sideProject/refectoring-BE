@@ -1,45 +1,56 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Tier } from './tier.entity';
-import { Comment } from './comment.entity';
-import { CategoryLike } from './categoryLike.entity';
-import { CommentLike } from './commentLike.entity';
-import { Post } from './post.entity';
-import { PostLike } from './postLike.entity';
-import { Recomment } from './recomment.entity';
-import { RecommentLike } from './recommentLike.entity';
+  UpdateDateColumn,
+} from "typeorm";
+import { Tier } from "./tier.entity";
+import { Comment } from "./comment.entity";
+import { CategoryLike } from "./categoryLike.entity";
+import { CommentLike } from "./commentLike.entity";
+import { Post } from "./post.entity";
+import { PostLike } from "./postLike.entity";
+import { Recomment } from "./recomment.entity";
+import { RecommentLike } from "./recommentLike.entity";
 
-@Entity('User')
+@Entity("User")
 export class User {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Column('varchar', { name: 'email' })
+  @Column("varchar", { name: "email" })
   email: string;
 
-  @Column('varchar', { name: 'password' })
+  @Column("varchar", { name: "password" })
   password: string;
 
-  @Column('int', { name: 'point' })
+  @Column("varchar", { name: "phoneNumber", nullable: true })
+  phoneNumber: string;
+
+  @Column("int", { name: "point" })
   point: number;
 
-  @Column('varchar', { name: 'nickname' })
+  @Column("varchar", { name: "nickname" })
   nickname: string;
 
-  @Column('int', { name: 'TierId' })
+  @Column("int", { name: "TierId" })
   TierId: number;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
   @ManyToOne(() => Tier, (Tier) => Tier.User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
-  @JoinColumn([{ name: 'TierId', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: "TierId", referencedColumnName: "id" }])
   Tier: Tier;
 
   @OneToMany(() => Comment, (Comment) => Comment.User)
