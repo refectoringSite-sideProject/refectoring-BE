@@ -10,7 +10,7 @@ export interface ICommentRepository {
     UserId: number
   ): Promise<void>;
 
-  findCommentsByPostId(PostId: number): Promise<Comment[]>;
+  findCommentsByPostId(PostId: number);
 
   updateComment(
     CommentId: number,

@@ -17,7 +17,7 @@ export class FakeCommentRepository implements ICommentRepository {
     return;
   }
 
-  async findCommentsByPostId(PostId: number): Promise<Comment[]> {
+  async findCommentsByPostId(PostId: number) {
     const result = [
       {
         id: 1,
