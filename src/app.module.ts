@@ -54,7 +54,7 @@ import { CommentLikeModule } from "./modules/comment-like/comment-like.module";
           ],
           autoLoadEntities: true,
           charset: "utf8mb4",
-          synchronize: false,
+          synchronize: true,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
         };
