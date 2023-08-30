@@ -28,6 +28,7 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
 import { CommentLikeModule } from "./modules/comment-like/comment-like.module";
 import { RecommentModule } from "./modules/recomment/recomment.module";
 import { RecommentLikeModule } from "./modules/recomment-like/recomment-like.module";
+import { HttpModule } from "./modules/http/http.module";
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { RecommentLikeModule } from "./modules/recomment-like/recomment-like.mod
     CommentLikeModule,
     RecommentModule,
     RecommentLikeModule,
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

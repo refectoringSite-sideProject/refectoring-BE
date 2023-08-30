@@ -13,13 +13,15 @@ import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
 import axios from "axios";
 import { Payload } from "./jwt/jwt.payload";
 import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
+import { HttpService } from "../http/http.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(IAuthRepository)
     private readonly authRepository: IAuthRepository,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly httpService: HttpService
   ) {}
 
   async signUp(body: SignUpInputDto): Promise<void> {
@@ -104,7 +106,7 @@ export class AuthService {
     const clientID = process.env.KAKAO_CLIENT_ID;
 
     try {
-      const tokenResponse = await axios.post(
+      const tokenResponse = await this.httpService.post(
         `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientID}&redirect_uri=${redirectURI}&code=${code}`,
         {
           headers: {
@@ -114,7 +116,7 @@ export class AuthService {
       );
 
       const accessToken = tokenResponse.data.access_token;
-      const userResponse = await axios.get(
+      const userResponse = await this.httpService.get(
         "https://kapi.kakao.com/v2/user/me",
         {
           headers: { Authorization: `Bearer ${accessToken}` },
