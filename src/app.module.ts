@@ -28,6 +28,7 @@ import { PostLikeModule } from "./modules/post-like/post-like.module";
 import { CommentLikeModule } from "./modules/comment-like/comment-like.module";
 import { RecommentModule } from "./modules/recomment/recomment.module";
 import { RecommentLikeModule } from "./modules/recomment-like/recomment-like.module";
+import { HttpModule } from "./modules/http/http.module";
 
 @Module({
   imports: [
@@ -56,7 +57,7 @@ import { RecommentLikeModule } from "./modules/recomment-like/recomment-like.mod
           ],
           autoLoadEntities: true,
           charset: "utf8mb4",
-          synchronize: true,
+          synchronize: false,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
         };
@@ -71,6 +72,7 @@ import { RecommentLikeModule } from "./modules/recomment-like/recomment-like.mod
     CommentLikeModule,
     RecommentModule,
     RecommentLikeModule,
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

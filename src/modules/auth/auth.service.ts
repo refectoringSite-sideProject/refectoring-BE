@@ -12,13 +12,16 @@ import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
 import axios from "axios";
 import { Payload } from "./jwt/jwt.payload";
+import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
+import { HttpService } from "../http/http.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(IAuthRepository)
     private readonly authRepository: IAuthRepository,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly httpService: HttpService
   ) {}
 
   async signUp(body: SignUpInputDto): Promise<void> {
@@ -54,8 +57,9 @@ export class AuthService {
     const payload = { sub: user._id };
     const accessToken = this.generateJwt(payload, "access");
     const refreshToken = this.generateJwt(payload, "refresh");
+    const isNewUser = false;
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, isNewUser };
   }
 
   generateJwt(payload: Payload, typeOfToken: string): string {
@@ -79,6 +83,7 @@ export class AuthService {
     const kakaoUser = await this.getKakaoUserInfo(code);
     let user = await this.authRepository.findUserBySocialId(kakaoUser.id);
 
+    let isNewUser = false;
     if (!user) {
       user = await this.authRepository.createBySocialId({
         email: kakaoUser.kakao_account.email,
@@ -86,13 +91,14 @@ export class AuthService {
         nickname: kakaoUser.properties.nickname,
         profileImg: kakaoUser.properties.thumbnail_image,
       });
+      isNewUser = true;
     }
 
     const payload = { sub: user._id };
     const accessToken = this.generateJwt(payload, "access");
     const refreshToken = this.generateJwt(payload, "refresh");
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, isNewUser };
   }
 
   async getKakaoUserInfo(code: string) {
@@ -100,7 +106,7 @@ export class AuthService {
     const clientID = process.env.KAKAO_CLIENT_ID;
 
     try {
-      const tokenResponse = await axios.post(
+      const tokenResponse = await this.httpService.post(
         `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientID}&redirect_uri=${redirectURI}&code=${code}`,
         {
           headers: {
@@ -110,7 +116,7 @@ export class AuthService {
       );
 
       const accessToken = tokenResponse.data.access_token;
-      const userResponse = await axios.get(
+      const userResponse = await this.httpService.get(
         "https://kapi.kakao.com/v2/user/me",
         {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -121,5 +127,13 @@ export class AuthService {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async saveUserPhoneNumber(
+    body: SaveUserPhoneNumberInputDto,
+    UserId: number
+  ): Promise<void> {
+    await this.authRepository.saveUserPhoneNumber(body, UserId);
+    return;
   }
 }

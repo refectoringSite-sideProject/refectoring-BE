@@ -3,6 +3,7 @@ import { plainToInstance } from "class-transformer";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import { IAuthRepository } from "./auth.IRepository";
+import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
 import { SignUpInputDto } from "./dto/input/sign-up.input.dto";
 import { SocialUserSignUpInputDto } from "./dto/input/socialUsersignUp.input.dto";
 import { UserOutputDto } from "./dto/output/user.output.dto";
@@ -42,5 +43,14 @@ export class AuthRepository implements IAuthRepository {
     newUser.TierId = 1;
     const result = await this.userModel.save(newUser);
     return plainToInstance(UserOutputDto, result);
+  }
+
+  async saveUserPhoneNumber(
+    body: SaveUserPhoneNumberInputDto,
+    UserId: number
+  ): Promise<void> {
+    const phoneNumber = body.phoneNumber;
+    await this.userModel.update({ id: UserId }, { phoneNumber });
+    return;
   }
 }

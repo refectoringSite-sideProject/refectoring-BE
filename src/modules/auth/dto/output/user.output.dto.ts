@@ -3,6 +3,7 @@ export class UserOutputDto {
   private email: string;
   private socialId: string;
   private password: string;
+  private phoneNumber: string;
   private point: number;
   private nickname: string;
   private profileImg: string;
