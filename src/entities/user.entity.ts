@@ -6,7 +6,10 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+<<<<<<< HEAD
   UpdateDateColumn,
+=======
+>>>>>>> c28c7a826c1220c7c1cdc06b3f03665771d3569e
 } from "typeorm";
 import { Tier } from "./tier.entity";
 import { Comment } from "./comment.entity";
@@ -22,6 +25,7 @@ export class User {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
+<<<<<<< HEAD
   @Column("varchar", { name: "email" })
   email: string;
 
@@ -31,12 +35,29 @@ export class User {
   @Column("varchar", { name: "phoneNumber", nullable: true })
   phoneNumber: string;
 
+=======
+  @Column("varchar", { name: "email", nullable: true })
+  email: string;
+
+  @Column("varchar", { name: "socialId" })
+  socialId: string;
+
+  @Column("varchar", { name: "password", nullable: true })
+  password: string;
+
+>>>>>>> c28c7a826c1220c7c1cdc06b3f03665771d3569e
   @Column("int", { name: "point" })
   point: number;
 
   @Column("varchar", { name: "nickname" })
   nickname: string;
 
+<<<<<<< HEAD
+=======
+  @Column("varchar", { name: "profileImg" })
+  profileImg: string;
+
+>>>>>>> c28c7a826c1220c7c1cdc06b3f03665771d3569e
   @Column("int", { name: "TierId" })
   TierId: number;
 

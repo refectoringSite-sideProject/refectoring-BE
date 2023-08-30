@@ -6,7 +6,10 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+<<<<<<< HEAD
   UpdateDateColumn,
+=======
+>>>>>>> c28c7a826c1220c7c1cdc06b3f03665771d3569e
 } from "typeorm";
 import { Comment } from "./comment.entity";
 import { User } from "./user.entity";
@@ -21,10 +24,17 @@ export class Recomment {
   content: string;
 
   @Column("int", { name: "CommentId" })
+<<<<<<< HEAD
   CommentId: string;
 
   @Column("int", { name: "UserId" })
   UserId: string;
+=======
+  CommentId: number;
+
+  @Column("int", { name: "UserId" })
+  UserId: number;
+>>>>>>> c28c7a826c1220c7c1cdc06b3f03665771d3569e
 
   @CreateDateColumn()
   createdAt: Date;

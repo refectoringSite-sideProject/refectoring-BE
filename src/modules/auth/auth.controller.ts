@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Param } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { SignInInputDto } from "./dto/input/sign-in.input.dto";
@@ -17,8 +17,17 @@ export class AuthController {
     return;
   }
 
+  @ApiOperation({ summary: "로그인 API" })
   @Post("signIn")
   async signIn(@Body() body: SignInInputDto): Promise<SignInOutputDto> {
     return await this.authService.signIn(body);
+  }
+
+  @ApiOperation({ summary: "카카오 로그인 API" })
+  @Post("kakao/callback/:code")
+  async kakaoAuthCallback(
+    @Param("code") code: string
+  ): Promise<SignInOutputDto> {
+    return await this.authService.kakaoLogin(code);
   }
 }

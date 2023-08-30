@@ -8,6 +8,7 @@ import { AuthService } from "../../src/modules/auth/auth.service";
 import { UserOutputDto } from "../../src/modules/auth/dto/output/user.output.dto";
 import { plainToInstance } from "class-transformer";
 import { ConfigModule } from "@nestjs/config";
+import { SocialUserSignUpInputDto } from "src/modules/auth/dto/input/socialUsersignUp.input.dto";
 
 export class FakeAuthRepository implements IAuthRepository {
   async create(signUpInputDto: SignUpInputDto): Promise<void> {
@@ -25,6 +26,14 @@ export class FakeAuthRepository implements IAuthRepository {
       return plainToInstance(UserOutputDto, result);
     }
     return;
+  }
+  findUserBySocialId(socailId: string): Promise<UserOutputDto> {
+    throw new Error("Method not implemented.");
+  }
+  createBySocialId(
+    socialUserSignUpInputDto: SocialUserSignUpInputDto
+  ): Promise<UserOutputDto> {
+    throw new Error("Method not implemented.");
   }
 }
 

@@ -10,6 +10,8 @@ import { SignUpInputDto } from "./dto/input/sign-up.input.dto";
 import * as bcrypt from "bcrypt";
 import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
+import axios from "axios";
+import { Payload } from "./jwt/jwt.payload";
 
 @Injectable()
 export class AuthService {
@@ -48,14 +50,15 @@ export class AuthService {
         "아이디 혹은 비밀번호가 올바르지 않습니다."
       );
     }
-    const payload = { email: user._email, sub: user._id };
+
+    const payload = { sub: user._id };
     const accessToken = this.generateJwt(payload, "access");
     const refreshToken = this.generateJwt(payload, "refresh");
 
     return { accessToken, refreshToken };
   }
 
-  generateJwt(payload, typeOfToken: string): string {
+  generateJwt(payload: Payload, typeOfToken: string): string {
     if (typeOfToken === "access") {
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.SECRET_KEY_ACCESS,
@@ -69,6 +72,54 @@ export class AuthService {
         expiresIn: process.env.EXPIRES_IN_REFRESH,
       });
       return refreshToken;
+    }
+  }
+
+  async kakaoLogin(code: string): Promise<SignInOutputDto> {
+    const kakaoUser = await this.getKakaoUserInfo(code);
+    let user = await this.authRepository.findUserBySocialId(kakaoUser.id);
+
+    if (!user) {
+      user = await this.authRepository.createBySocialId({
+        email: kakaoUser.kakao_account.email,
+        socialId: kakaoUser.id,
+        nickname: kakaoUser.properties.nickname,
+        profileImg: kakaoUser.properties.thumbnail_image,
+      });
+    }
+
+    const payload = { sub: user._id };
+    const accessToken = this.generateJwt(payload, "access");
+    const refreshToken = this.generateJwt(payload, "refresh");
+
+    return { accessToken, refreshToken };
+  }
+
+  async getKakaoUserInfo(code: string) {
+    const redirectURI = "http://localhost:3000/kakao/callback";
+    const clientID = process.env.KAKAO_CLIENT_ID;
+
+    try {
+      const tokenResponse = await axios.post(
+        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientID}&redirect_uri=${redirectURI}&code=${code}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+          },
+        }
+      );
+
+      const accessToken = tokenResponse.data.access_token;
+      const userResponse = await axios.get(
+        "https://kapi.kakao.com/v2/user/me",
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      const userInfo = userResponse.data;
+      return userInfo;
+    } catch (err) {
+      console.log(err);
     }
   }
 }
