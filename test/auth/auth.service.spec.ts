@@ -9,6 +9,7 @@ import { UserOutputDto } from "../../src/modules/auth/dto/output/user.output.dto
 import { plainToInstance } from "class-transformer";
 import { ConfigModule } from "@nestjs/config";
 import { SocialUserSignUpInputDto } from "src/modules/auth/dto/input/socialUsersignUp.input.dto";
+import { SaveUserPhoneNumberInputDto } from "src/modules/auth/dto/input/saveUserPhoneNumber.dto";
 
 export class FakeAuthRepository implements IAuthRepository {
   async create(signUpInputDto: SignUpInputDto): Promise<void> {
@@ -34,6 +35,12 @@ export class FakeAuthRepository implements IAuthRepository {
     socialUserSignUpInputDto: SocialUserSignUpInputDto
   ): Promise<UserOutputDto> {
     throw new Error("Method not implemented.");
+  }
+  saveUserPhoneNumber(
+    body: SaveUserPhoneNumberInputDto,
+    userId: number
+  ): Promise<void> {
+    return;
   }
 }
 
@@ -103,4 +110,13 @@ describe("AuthService", () => {
   //   const result = await service.generateJwt(payload, "access");
   //   expect(typeof result).toEqual("string");
   // });
+
+  it("휴대폰 번호를 저장한다.", async () => {
+    const body = { phoneNumber: "01012345678" };
+    const UserId = 1;
+
+    const result = await service.saveUserPhoneNumber(body, UserId);
+
+    expect(result).toBeNull;
+  });
 });

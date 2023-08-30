@@ -56,7 +56,7 @@ import { RecommentLikeModule } from "./modules/recomment-like/recomment-like.mod
           ],
           autoLoadEntities: true,
           charset: "utf8mb4",
-          synchronize: true,
+          synchronize: false,
           logging: true, // query 날리는것 로깅
           // keepConnectionAlive: true, //hot reloading 할때 필요
         };

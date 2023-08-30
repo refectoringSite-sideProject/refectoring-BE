@@ -12,6 +12,7 @@ import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
 import axios from "axios";
 import { Payload } from "./jwt/jwt.payload";
+import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
 
 @Injectable()
 export class AuthService {
@@ -54,8 +55,9 @@ export class AuthService {
     const payload = { sub: user._id };
     const accessToken = this.generateJwt(payload, "access");
     const refreshToken = this.generateJwt(payload, "refresh");
+    const isNewUser = false;
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, isNewUser };
   }
 
   generateJwt(payload: Payload, typeOfToken: string): string {
@@ -79,6 +81,7 @@ export class AuthService {
     const kakaoUser = await this.getKakaoUserInfo(code);
     let user = await this.authRepository.findUserBySocialId(kakaoUser.id);
 
+    let isNewUser = false;
     if (!user) {
       user = await this.authRepository.createBySocialId({
         email: kakaoUser.kakao_account.email,
@@ -86,13 +89,14 @@ export class AuthService {
         nickname: kakaoUser.properties.nickname,
         profileImg: kakaoUser.properties.thumbnail_image,
       });
+      isNewUser = true;
     }
 
     const payload = { sub: user._id };
     const accessToken = this.generateJwt(payload, "access");
     const refreshToken = this.generateJwt(payload, "refresh");
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, isNewUser };
   }
 
   async getKakaoUserInfo(code: string) {
@@ -121,5 +125,13 @@ export class AuthService {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async saveUserPhoneNumber(
+    body: SaveUserPhoneNumberInputDto,
+    UserId: number
+  ): Promise<void> {
+    await this.authRepository.saveUserPhoneNumber(body, UserId);
+    return;
   }
 }
