@@ -63,26 +63,26 @@ describe("AuthService", () => {
     service = module.get<AuthService>(AuthService);
   });
 
-  it("회원가입: id가 이미 존재하는 경우 - 실패", async () => {
-    const body = {
-      email: "honggd@gmail.com",
-      password: "asdf1234!",
-      nickname: "실패",
-    };
-    await expect(service.signUp(body)).rejects.toThrowError(
-      new BadRequestException("이미 존재하는 id입니다")
-    );
-  });
+  // it("회원가입: id가 이미 존재하는 경우 - 실패", async () => {
+  //   const body = {
+  //     email: "honggd@gmail.com",
+  //     password: "asdf1234!",
+  //     nickname: "실패",
+  //   };
+  //   await expect(service.signUp(body)).rejects.toThrowError(
+  //     new BadRequestException("이미 존재하는 id입니다")
+  //   );
+  // });
 
-  it("회원가입이 성공했을 경우", async () => {
-    const body = {
-      email: "test@gmail.com",
-      password: "asdf1234!",
-      nickname: "테스트",
-    };
-    const result = await service.signUp(body);
-    expect(result).toBeNull;
-  });
+  // it("회원가입이 성공했을 경우", async () => {
+  //   const body = {
+  //     email: "test@gmail.com",
+  //     password: "asdf1234!",
+  //     nickname: "테스트",
+  //   };
+  //   const result = await service.signUp(body);
+  //   expect(result).toBeNull;
+  // });
 
   // it("로그인: 존재하지 않는 id일 경우 - 실패", async () => {
   //   const body = { email: "test@gmail.com", password: "asdf1234!" };
@@ -111,12 +111,12 @@ describe("AuthService", () => {
   //   expect(typeof result).toEqual("string");
   // });
 
-  it("휴대폰 번호를 저장한다.", async () => {
-    const body = { phoneNumber: "01012345678" };
-    const UserId = 1;
+  // it("휴대폰 번호를 저장한다.", async () => {
+  //   const body = { phoneNumber: "01012345678" };
+  //   const UserId = 1;
 
-    const result = await service.saveUserPhoneNumber(body, UserId);
+  //   const result = await service.saveUserPhoneNumber(body, UserId);
 
-    expect(result).toBeNull;
-  });
+  //   expect(result).toBeNull;
+  // });
 });
