@@ -12,7 +12,7 @@ import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
 import axios from "axios";
 import { Payload } from "./jwt/jwt.payload";
-import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
+import { SaveUserPhoneNumberInputDto } from "../user/dto/input/saveUserPhoneNumber.dto";
 import { HttpService } from "../http/http.service";
 
 @Injectable()

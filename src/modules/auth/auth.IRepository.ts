@@ -1,4 +1,4 @@
-import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
+import { SaveUserPhoneNumberInputDto } from "../user/dto/input/saveUserPhoneNumber.dto";
 import { SignUpInputDto } from "./dto/input/sign-up.input.dto";
 import { SocialUserSignUpInputDto } from "./dto/input/socialUsersignUp.input.dto";
 import { UserOutputDto } from "./dto/output/user.output.dto";

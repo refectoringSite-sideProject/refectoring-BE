@@ -10,7 +10,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "src/common/decorators/user.decorator";
 import { AuthService } from "./auth.service";
-import { SaveUserPhoneNumberInputDto } from "./dto/input/saveUserPhoneNumber.dto";
+import { SaveUserPhoneNumberInputDto } from "../user/dto/input/saveUserPhoneNumber.dto";
 import { SignInInputDto } from "./dto/input/sign-in.input.dto";
 import { SignUpInputDto } from "./dto/input/sign-up.input.dto";
 import { SignInOutputDto } from "./dto/output/sign-in.output.dto";
@@ -39,15 +39,5 @@ export class AuthController {
     @Param("code") code: string
   ): Promise<SignInOutputDto> {
     return await this.authService.kakaoLogin(code);
-  }
-
-  @ApiOperation({ summary: "휴대폰 번호 저장 API" })
-  @Patch("phoneNumber")
-  @UseGuards(AuthGuard("jwt"))
-  async saveUserPhoneNumber(
-    @Body() body: SaveUserPhoneNumberInputDto,
-    @User() User
-  ): Promise<void> {
-    return await this.authService.saveUserPhoneNumber(body, User.sub);
   }
 }
