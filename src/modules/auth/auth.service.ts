@@ -114,7 +114,6 @@ export class AuthService {
           },
         }
       );
-
       const accessToken = tokenResponse.data.access_token;
       const userResponse = await this.httpService.get(
         "https://kapi.kakao.com/v2/user/me",
