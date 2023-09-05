@@ -98,7 +98,7 @@ export class PostRepository implements IPostRepository {
     return post;
   }
 
-  async getLatestPosts(): Promise<GetAllPostOutputDto[]> {
+  async getLatestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
     const result = await this.postRepository
       .createQueryBuilder("post")
       .leftJoin("post.Comment", "comment")
@@ -116,13 +116,13 @@ export class PostRepository implements IPostRepository {
       ])
       .groupBy("post.id")
       .orderBy("post.createdAt", "DESC")
-      .limit(5)
+      .limit(numberOfPosts)
       .getRawMany();
 
     return result;
   }
 
-  async getBestPosts(): Promise<GetAllPostOutputDto[]> {
+  async getBestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
     const result = await this.postRepository
       .createQueryBuilder("post")
       .leftJoin("post.Comment", "comment")
@@ -131,14 +131,18 @@ export class PostRepository implements IPostRepository {
         "post.id",
         "post.title",
         "post.content",
+        "post.tag",
         "post.UserId",
         "post.CategoryId",
         "COUNT(comment.id) as commentCount",
         "COUNT(postLike.id) as likeCount",
       ])
       .groupBy("post.id")
-      .orderBy("likeCount", "DESC")
-      .limit(5)
+      .orderBy({
+        likeCount: "DESC",
+        "post.createdAt": "DESC",
+      })
+      .limit(numberOfPosts)
       .getRawMany();
 
     return result;

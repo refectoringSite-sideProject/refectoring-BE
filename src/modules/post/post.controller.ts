@@ -24,16 +24,20 @@ export class PostController {
   }
 
   @ApiOperation({ summary: "메인페이지용 최신글 가져오기 API" })
-  @Get("/latest")
-  async getLatestPosts(): Promise<GetAllPostOutputDto[]> {
-    const result = await this.postService.getLatestPosts();
+  @Get("/latest/:numberOfPosts")
+  async getLatestPosts(
+    @Param("numberOfPosts") numberOfPosts: number
+  ): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postService.getLatestPosts(numberOfPosts);
     return result;
   }
 
   @ApiOperation({ summary: "메인페이지용 인기글 가져오기 API" })
-  @Get("/best")
-  async getBestPosts(): Promise<GetAllPostOutputDto[]> {
-    const result = await this.postService.getBestPosts();
+  @Get("/best/:numberOfPosts")
+  async getBestPosts(
+    @Param("numberOfPosts") numberOfPosts: number
+  ): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postService.getBestPosts(numberOfPosts);
     return result;
   }
 
