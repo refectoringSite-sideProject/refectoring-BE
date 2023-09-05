@@ -36,11 +36,22 @@ export class PostService {
 
   async getLatestPosts(): Promise<GetAllPostOutputDto[]> {
     const posts = await this.postRepository.getLatestPosts();
+    posts.map((post) => {
+      if (typeof post.post_tag === "string") {
+        post.post_tag = post.post_tag.split(",");
+      }
+    });
+
     return posts;
   }
 
   async getBestPosts(): Promise<GetAllPostOutputDto[]> {
     const posts = await this.postRepository.getBestPosts();
+    posts.map((post) => {
+      if (typeof post.post_tag === "string") {
+        post.post_tag = post.post_tag.split(",");
+      }
+    });
     return posts;
   }
 }
