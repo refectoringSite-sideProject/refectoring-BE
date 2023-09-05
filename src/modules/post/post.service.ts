@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Post } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { IPostRepository } from "./post.IRepository";
 import { CreatePostInputDto } from "./dto/input/createPost.input.dto";
 import { GetAllPostOutputDto } from "./dto/output/getAllPost.output.dto";
@@ -32,5 +32,26 @@ export class PostService {
   async getPost(CategoryId: number, PostId: number): Promise<GetPostOutputDto> {
     const post = await this.postRepository.getPostByPostId(CategoryId, PostId);
     return post;
+  }
+
+  async getLatestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
+    const posts = await this.postRepository.getLatestPosts(numberOfPosts);
+    posts.map((post) => {
+      if (typeof post.post_tag === "string") {
+        post.post_tag = post.post_tag.split(",");
+      }
+    });
+
+    return posts;
+  }
+
+  async getBestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
+    const posts = await this.postRepository.getBestPosts(numberOfPosts);
+    posts.map((post) => {
+      if (typeof post.post_tag === "string") {
+        post.post_tag = post.post_tag.split(",");
+      }
+    });
+    return posts;
   }
 }

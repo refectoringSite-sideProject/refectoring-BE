@@ -24,6 +24,9 @@ export class Post {
   @Column("varchar", { name: "content" })
   content: string;
 
+  @Column("varchar", { name: "tag", nullable: true })
+  tag: string;
+
   @Column("int", { name: "UserId" })
   UserId: number;
 

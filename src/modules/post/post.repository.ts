@@ -30,11 +30,12 @@ export class PostRepository implements IPostRepository {
   }
 
   async createPost(body: CreatePostInputDto, UserId: number): Promise<void> {
-    const { title, content, CategoryId } = body;
+    const { title, content, tag, CategoryId } = body;
 
     const newPost = this.postRepository.create();
     newPost.title = title;
     newPost.content = content;
+    newPost.tag = tag.toString();
     newPost.CategoryId = CategoryId;
     newPost.UserId = UserId;
     await this.postRepository.save(newPost);
@@ -53,6 +54,8 @@ export class PostRepository implements IPostRepository {
         "post.id",
         "post.title",
         "post.content",
+        "post.tag",
+        "post.createdAt",
         "post.UserId",
         "post.CategoryId",
         "COUNT(comment.id) as commentCount",
@@ -78,6 +81,8 @@ export class PostRepository implements IPostRepository {
         "post.id",
         "post.title",
         "post.content",
+        "post.tag",
+        "post.createdAt",
         "post.UserId",
         "post.CategoryId",
         "user.id",
@@ -91,5 +96,55 @@ export class PostRepository implements IPostRepository {
       .getRawOne();
 
     return post;
+  }
+
+  async getLatestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postRepository
+      .createQueryBuilder("post")
+      .leftJoin("post.Comment", "comment")
+      .leftJoin("post.PostLike", "postLike")
+      .select([
+        "post.id",
+        "post.title",
+        "post.content",
+        "post.tag",
+        "post.createdAt",
+        "post.UserId",
+        "post.CategoryId",
+        "COUNT(comment.id) as commentCount",
+        "COUNT(postLike.id) as likeCount",
+      ])
+      .groupBy("post.id")
+      .orderBy("post.createdAt", "DESC")
+      .limit(numberOfPosts)
+      .getRawMany();
+
+    return result;
+  }
+
+  async getBestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postRepository
+      .createQueryBuilder("post")
+      .leftJoin("post.Comment", "comment")
+      .leftJoin("post.PostLike", "postLike")
+      .select([
+        "post.id",
+        "post.title",
+        "post.content",
+        "post.tag",
+        "post.UserId",
+        "post.CategoryId",
+        "COUNT(comment.id) as commentCount",
+        "COUNT(postLike.id) as likeCount",
+      ])
+      .groupBy("post.id")
+      .orderBy({
+        likeCount: "DESC",
+        "post.createdAt": "DESC",
+      })
+      .limit(numberOfPosts)
+      .getRawMany();
+
+    return result;
   }
 }
