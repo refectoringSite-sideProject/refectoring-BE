@@ -25,7 +25,7 @@ export class User {
   @Column("varchar", { name: "email", nullable: true })
   email: string;
 
-  @Column("varchar", { name: "socialId" })
+  @Column("varchar", { name: "socialId", nullable: true })
   socialId: string;
 
   @Column("varchar", { name: "password", nullable: true })
@@ -40,7 +40,7 @@ export class User {
   @Column("varchar", { name: "nickname" })
   nickname: string;
 
-  @Column("varchar", { name: "profileImg" })
+  @Column("varchar", { name: "profileImg", nullable: true })
   profileImg: string;
 
   @Column("int", { name: "TierId" })

@@ -35,6 +35,7 @@ export class PostRepository implements IPostRepository {
     const newPost = this.postRepository.create();
     newPost.title = title;
     newPost.content = content;
+    newPost.content = content;
     newPost.CategoryId = CategoryId;
     newPost.UserId = UserId;
     await this.postRepository.save(newPost);
@@ -53,6 +54,7 @@ export class PostRepository implements IPostRepository {
         "post.id",
         "post.title",
         "post.content",
+        "post.createdAt",
         "post.UserId",
         "post.CategoryId",
         "COUNT(comment.id) as commentCount",
@@ -78,6 +80,7 @@ export class PostRepository implements IPostRepository {
         "post.id",
         "post.title",
         "post.content",
+        "post.createdAt",
         "post.UserId",
         "post.CategoryId",
         "user.id",
@@ -91,5 +94,51 @@ export class PostRepository implements IPostRepository {
       .getRawOne();
 
     return post;
+  }
+
+  async getLatestPosts(): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postRepository
+      .createQueryBuilder("post")
+      .leftJoin("post.Comment", "comment")
+      .leftJoin("post.PostLike", "postLike")
+      .select([
+        "post.id",
+        "post.title",
+        "post.content",
+        "post.tag",
+        "post.createdAt",
+        "post.UserId",
+        "post.CategoryId",
+        "COUNT(comment.id) as commentCount",
+        "COUNT(postLike.id) as likeCount",
+      ])
+      .groupBy("post.id")
+      .orderBy("post.createdAt", "DESC")
+      .limit(5)
+      .getRawMany();
+
+    return result;
+  }
+
+  async getBestPosts(): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postRepository
+      .createQueryBuilder("post")
+      .leftJoin("post.Comment", "comment")
+      .leftJoin("post.PostLike", "postLike")
+      .select([
+        "post.id",
+        "post.title",
+        "post.content",
+        "post.UserId",
+        "post.CategoryId",
+        "COUNT(comment.id) as commentCount",
+        "COUNT(postLike.id) as likeCount",
+      ])
+      .groupBy("post.id")
+      .orderBy("likeCount", "DESC")
+      .limit(5)
+      .getRawMany();
+
+    return result;
   }
 }

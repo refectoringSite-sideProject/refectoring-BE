@@ -11,6 +11,8 @@ export interface IPostRepository {
     CategoryId: number,
     PostId: number
   ): Promise<GetPostOutputDto>;
+  getLatestPosts(): Promise<GetAllPostOutputDto[]>;
+  getBestPosts(): Promise<GetAllPostOutputDto[]>;
 }
 
 export const IPostRepository = Symbol("IPostRepository");

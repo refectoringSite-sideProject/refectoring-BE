@@ -5,6 +5,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { User } from "src/common/decorators/user.decorator";
 import { GetPostOutputDto } from "./dto/output/getPost.output.dto";
+import { GetAllPostOutputDto } from "./dto/output/getAllPost.output.dto";
 
 @ApiTags("Post")
 @Controller("post")
@@ -20,6 +21,20 @@ export class PostController {
   ): Promise<void> {
     await this.postService.createPost(body, user.sub);
     return;
+  }
+
+  @ApiOperation({ summary: "메인페이지용 최신글 가져오기 API" })
+  @Get("/latest")
+  async getLatestPosts(): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postService.getLatestPosts();
+    return result;
+  }
+
+  @ApiOperation({ summary: "메인페이지용 인기글 가져오기 API" })
+  @Get("/best")
+  async getBestPosts(): Promise<GetAllPostOutputDto[]> {
+    const result = await this.postService.getBestPosts();
+    return result;
   }
 
   @ApiOperation({ summary: "게시물 전체조회 API" })
