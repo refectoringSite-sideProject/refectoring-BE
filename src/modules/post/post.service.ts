@@ -55,7 +55,11 @@ export class PostService {
 
     let next: string;
     let nextValue = offset + limit;
-    next = `${BASE_URL}?categoryId=${categoryId}&limit=${limit}&offset=${nextValue}`;
+    if (offset + limit >= postsCount) {
+      next = null;
+    } else {
+      next = `${BASE_URL}?categoryId=${categoryId}&limit=${limit}&offset=${nextValue}`;
+    }
 
     let previous: string;
     let previousValue = offset - limit;
