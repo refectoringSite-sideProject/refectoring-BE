@@ -17,9 +17,7 @@ export class PostRepository implements IPostRepository {
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
     @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
-    @InjectRepository(Comment)
-    private readonly commentRepository: Repository<Comment>
+    private readonly categoryRepository: Repository<Category>
   ) {}
 
   async isCategory(CategoryId: number): Promise<IsCategoryOutputDto> {
@@ -63,6 +61,45 @@ export class PostRepository implements IPostRepository {
       ])
       .groupBy("post.id")
       .getRawMany();
+
+    return result;
+  }
+
+  async getPostPagenation(limit: number, offset: number, categoryId: number) {
+    const result = await this.postRepository
+      .createQueryBuilder("post")
+      .where("post.CategoryId = :categoryId", { categoryId })
+      .leftJoin("post.User", "users")
+      .leftJoin("post.Category", "categories")
+      .leftJoin("post.PostLike", "postLikes")
+      .leftJoin("post.Comment", "comments")
+      .select([
+        "post.id",
+        "post.title",
+        "post.tag",
+        "post.createdAt",
+        "categories.id",
+        "categories.category",
+        "users.id",
+        "users.point",
+        "users.nickname",
+        "users.profileImg",
+        "users.TierId",
+        "postLikes.id",
+        "comments.id",
+      ])
+      .offset(offset)
+      .limit(limit)
+      .getMany();
+
+    return result;
+  }
+
+  async postsCount(categoryId: number) {
+    const result = await this.postRepository
+      .createQueryBuilder("post")
+      .where("post.CategoryId = :categoryId", { categoryId })
+      .getCount();
 
     return result;
   }

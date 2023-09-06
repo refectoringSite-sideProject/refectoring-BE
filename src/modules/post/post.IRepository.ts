@@ -13,6 +13,8 @@ export interface IPostRepository {
   ): Promise<GetPostOutputDto>;
   getLatestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]>;
   getBestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]>;
+  getPostPagenation(limit: number, offset: number, categoryId: number);
+  postsCount(categoryId: number);
 }
 
 export const IPostRepository = Symbol("IPostRepository");

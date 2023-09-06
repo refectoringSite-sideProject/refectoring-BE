@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
 import { PostService } from "./post.service";
 import { CreatePostInputDto } from "./dto/input/createPost.input.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -45,6 +53,21 @@ export class PostController {
   @Get("/:CategoryId")
   async getAllPost(@Param("CategoryId") CategoryId: number) {
     const result = await this.postService.getAllPost(CategoryId);
+    return result;
+  }
+
+  @ApiOperation({ summary: "게시글 페이지네이션 API" })
+  @Get()
+  async postPagenation(
+    @Query("limit") limit: number,
+    @Query("offset") offset: number,
+    @Query("categoryId") categoryId: number
+  ) {
+    const result = await this.postService.getPostPagenation(
+      limit,
+      offset,
+      categoryId
+    );
     return result;
   }
 
