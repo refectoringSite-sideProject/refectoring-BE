@@ -75,6 +75,10 @@ export class FakePostRepository implements IPostRepository {
     return;
   }
 
+  async postsCount(categoryId: number) {}
+
+  async getPostPagenation(limit: number, offset: number, categoryId: number) {}
+
   async isCategory(CategoryId: number): Promise<IsCategoryOutputDto> {
     if (CategoryId === 1) {
       return plainToInstance(IsCategoryOutputDto, categoryMockData.category);
