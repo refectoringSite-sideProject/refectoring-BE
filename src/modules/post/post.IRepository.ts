@@ -11,8 +11,8 @@ export interface IPostRepository {
     CategoryId: number,
     PostId: number
   ): Promise<GetPostOutputDto>;
-  getLatestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]>;
-  getBestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]>;
+  getLatestPosts(numberOfPosts: number);
+  getBestPosts(numberOfPosts: number);
   getPostPagenation(limit: number, offset: number, categoryId: number);
   postsCount(categoryId: number);
 }

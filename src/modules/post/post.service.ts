@@ -80,9 +80,17 @@ export class PostService {
   async getLatestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
     const posts = await this.postRepository.getLatestPosts(numberOfPosts);
     posts.map((post) => {
-      if (typeof post.post_tag === "string") {
-        post.post_tag = post.post_tag.split(",");
-      }
+      if (post.tag) post.tag = post.tag.split(",");
+    });
+
+    posts.map((post) => {
+      post.PostLike = post.PostLike.length;
+      post.Comment = post.Comment.length;
+
+      post["postLike"] = post["PostLike"];
+      post["comment"] = post["Comment"];
+      delete post["PostLike"];
+      delete post["Comment"];
     });
 
     return posts;
@@ -91,10 +99,20 @@ export class PostService {
   async getBestPosts(numberOfPosts: number): Promise<GetAllPostOutputDto[]> {
     const posts = await this.postRepository.getBestPosts(numberOfPosts);
     posts.map((post) => {
-      if (typeof post.post_tag === "string") {
-        post.post_tag = post.post_tag.split(",");
-      }
+      if (post.tag) post.tag = post.tag.split(",");
     });
-    return posts;
+
+    posts.map((post) => {
+      post.PostLike = post.PostLike.length;
+      post.Comment = post.Comment.length;
+
+      post["postLike"] = post["PostLike"];
+      post["comment"] = post["Comment"];
+      delete post["PostLike"];
+      delete post["Comment"];
+    });
+
+    const sortedPosts = posts.sort((a, b) => a.postLike - b.postLike);
+    return sortedPosts;
   }
 }
