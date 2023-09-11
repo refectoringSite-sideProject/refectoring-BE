@@ -38,6 +38,8 @@ export class AuthController {
   async kakaoAuthCallback(
     @Param("code") code: string
   ): Promise<SignInOutputDto> {
-    return await this.authService.kakaoLogin(code);
+    const result = await this.authService.kakaoLogin(code);
+    console.log(result);
+    return result;
   }
 }

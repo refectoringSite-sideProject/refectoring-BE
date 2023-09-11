@@ -14,6 +14,8 @@ import axios from "axios";
 import { Payload } from "./jwt/jwt.payload";
 import { SaveUserPhoneNumberInputDto } from "../user/dto/input/saveUserPhoneNumber.dto";
 import { HttpService } from "../http/http.service";
+import { User } from "src/entities/user.entity";
+import { UserOutputDto } from "./dto/output/user.output.dto";
 
 @Injectable()
 export class AuthService {
@@ -41,7 +43,8 @@ export class AuthService {
 
   async signIn(body: SignInInputDto): Promise<SignInOutputDto> {
     const { email, password } = body;
-    const user = await this.authRepository.findUserByEmail(email);
+    let user: UserOutputDto;
+    user = await this.authRepository.findUserByEmail(email);
     if (!user) {
       throw new UnauthorizedException(
         "아이디 혹은 비밀번호가 올바르지 않습니다."
@@ -59,7 +62,7 @@ export class AuthService {
     const refreshToken = this.generateJwt(payload, "refresh");
     const isNewUser = false;
 
-    return { accessToken, refreshToken, isNewUser };
+    return { user, accessToken, refreshToken, isNewUser };
   }
 
   generateJwt(payload: Payload, typeOfToken: string): string {
@@ -68,20 +71,21 @@ export class AuthService {
         secret: process.env.SECRET_KEY_ACCESS,
         expiresIn: process.env.EXPIRES_IN_ACCESS,
       });
-      return accessToken;
+      return `Bearer ${accessToken}`;
     }
     if (typeOfToken === "refresh") {
       const refreshToken = this.jwtService.sign(payload, {
         secret: process.env.SECRET_KEY_REFRESH,
         expiresIn: process.env.EXPIRES_IN_REFRESH,
       });
-      return refreshToken;
+      return `Bearer ${refreshToken}`;
     }
   }
 
   async kakaoLogin(code: string): Promise<SignInOutputDto> {
     const kakaoUser = await this.getKakaoUserInfo(code);
-    let user = await this.authRepository.findUserBySocialId(kakaoUser.id);
+    let user: UserOutputDto;
+    user = await this.authRepository.findUserBySocialId(kakaoUser.id);
 
     let isNewUser = false;
     if (!user) {
@@ -98,7 +102,7 @@ export class AuthService {
     const accessToken = this.generateJwt(payload, "access");
     const refreshToken = this.generateJwt(payload, "refresh");
 
-    return { accessToken, refreshToken, isNewUser };
+    return { user, accessToken, refreshToken, isNewUser };
   }
 
   async getKakaoUserInfo(code: string) {
