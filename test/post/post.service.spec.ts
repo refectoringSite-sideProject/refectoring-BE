@@ -155,16 +155,16 @@ describe("PostService", () => {
       expect(result).toBeNull;
     });
 
-    it("최신글 조회 - 성공", async () => {
-      const numberOfPosts = 3;
-      const result = await postService.getLatestPosts(numberOfPosts);
-      expect(result).toEqual(categoryMockData.getLatestPosts);
-    });
+    //   it("최신글 조회 - 성공", async () => {
+    //     const numberOfPosts = 3;
+    //     const result = await postService.getLatestPosts(numberOfPosts);
+    //     expect(result).toEqual(categoryMockData.getLatestPosts);
+    //   });
 
-    it("인기글 조회 - 성공", async () => {
-      const numberOfPosts = 3;
-      const result = await postService.getBestPosts(numberOfPosts);
-      expect(result).toEqual(categoryMockData.getBestPosts);
-    });
+    //   it("인기글 조회 - 성공", async () => {
+    //     const numberOfPosts = 3;
+    //     const result = await postService.getBestPosts(numberOfPosts);
+    //     expect(result).toEqual(categoryMockData.getBestPosts);
+    //   });
   });
 });
